@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Question Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Manage Exam Questions</h2>
+
+    <div class="mb-3">
+        <label for="questionId" class="form-label">Question ID:</label>
+        <input type="text" id="questionId" class="form-control mb-2" placeholder="Question Content" required>
+
+        <label for="content" class="form-label">Content :</label>
+        <input type="text" id="content" class="form-control mb-2" placeholder="Question Content" required>
+
+        <label for="option1" class="form-label">Option 1:</label>
+        <input type="text" id="option1" class="form-control mb-2" placeholder="Option 1" required>
+
+        <label for="option2" class="form-label">Option 2:</label>
+        <input type="text" id="option2" class="form-control mb-2" placeholder="Option 2" required>
+
+        <label for="option3" class="form-label">Option 3:</label>
+        <input type="text" id="option3" class="form-control mb-2" placeholder="Option 3" required>
+
+        <label for="option4" class="form-label">Option 4:</label>
+        <input type="text" id="option4" class="form-control mb-2" placeholder="Option 4" required>
+
+        <label for="mcqNumber" class="form-label">MCQ number :</label>
+        <input type="number" id="mcqNumber" class="form-control mb-2" placeholder="MCQ Number" required>
+
+        <label for="answer" class="form-label">Answer :</label>
+        <input type="text" id="answer" class="form-control mb-2" placeholder="Correct Answer" required>
+
+        <label for="examId" class="form-label">Exam Id:</label>
+        <input type="number" id="examId" class="form-control mb-2" placeholder="Exam ID" required>
+
+<!--        <input type="number" id="searchMcqNumber" placeholder="Enter MCQ Number">-->
+<!--        <button onclick="fetchQuestionsByMcq($('#searchMcqNumber').val())">Search</button>-->
+
+        <button class="btn btn-primary" onclick="handleSubmit()">Add/Update Question</button>
+    </div>
+
+    <ul id="questionList" class="list-group"></ul>
+
+    <h3>Search Questions</h3>
+    <input type="number" id="searchMcqNumber" class="form-control mb-2" placeholder="Enter MCQ Number">
+    <button class="btn btn-info" onclick="fetchQuestionsByMcq($('#searchMcqNumber').val())">Search</button>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>MCQ Number</th>
+            <th>Content</th>
+            <th>Options</th>
+            <th>Answer</th>
+            <th>Exam ID</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="questionTableBody"></tbody>
+    </table>
+</div>
+</div>
+
+<script>
+    function fetchQuestionsByMcq(mcqNumber) {
+        $.get(`http://localhost:8080/question/mcq/${mcqNumber}`, function (data) {
+            let tableBody = "";
+            data.forEach(q => {
+                tableBody += `
+            <tr>
+                <td>${q.mcqNumber}</td>
+                <td>${q.content}</td>
+                <td>${q.option1}, ${q.option2}, ${q.option3}, ${q.option4}</td>
+                <td>${q.answer}</td>
+                <td>${q.exam.id}</td>
+                <td>
+                    <button class="btn btn-success btn-sm" onclick="populateForm(${q.qid}, '${q.content}', '${q.option1}', '${q.option2}', '${q.option3}', '${q.option4}', ${q.mcqNumber}, '${q.answer}', ${q.exam.id})">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="handleDelete(${q.qid})">Delete</button>
+                </td>
+            </tr>
+            `;
+            });
+            $("#questionTableBody").html(tableBody);
+        });
+    }
+
+    function populateForm(qid, content, option1, option2, option3, option4, mcqNumber, answer, examId) {
+        $("#questionId").val(qid);
+        $("#content").val(content);
+        $("#option1").val(option1);
+        $("#option2").val(option2);
+        $("#option3").val(option3);
+        $("#option4").val(option4);
+        $("#mcqNumber").val(mcqNumber);
+        $("#answer").val(answer);
+        $("#examId").val(examId);
+    }
+
+    function handleSubmit() {
+        let examId = parseInt($("#examId").val());
+
+        if (isNaN(examId) || examId <= 0) {
+            alert("Invalid Exam ID!");
+            return;
+        }
+
+        let question = {
+            content: $("#content").val(),
+            option1: $("#option1").val(),
+            option2: $("#option2").val(),
+            option3: $("#option3").val(),
+            option4: $("#option4").val(),
+            mcqNumber: parseInt($("#mcqNumber").val()),
+            answer: $("#answer").val(),
+            exam: { id: examId }  // Ensure exam.id is included
+        };
+
+        let questionId = $("#questionId").val();
+
+        if (questionId) {
+            question.qid = parseInt(questionId);
+            $.ajax({
+                url: "http://localhost:8080/question/put",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify(question),
+                success: function () {
+                    alert("Question updated!");
+                    fetchQuestionsByMcq($("#mcqNumber").val());
+                },
+                error: function (xhr) { console.error(xhr.responseText); }
+            });
+        } else {
+            $.ajax({
+                url: "http://localhost:8080/question/post",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(question),
+                success: function () {
+                    alert("Question added!");
+                    fetchQuestionsByMcq($("#mcqNumber").val());
+                },
+                error: function (xhr) { console.error(xhr.responseText); }
+            });
+        }
+    }
+
+
+    function handleDelete(questionId) {
+        $.ajax({
+            url: `http://localhost:8080/question/${questionId}`,
+            type: "DELETE",
+            success: function () {
+                alert("Question deleted!");
+                fetchQuestionsByMcq($("#searchMcqNumber").val());
+            },
+            error: function (xhr) { console.error(xhr.responseText); }
+        });
+    }
+
+</script>
+
+</body>
+</html>
