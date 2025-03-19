@@ -26,4 +26,15 @@ public class ExamDTO {
     private List<Result> answers;
 
 
+
+    public ExamDTO(int id, String duration, String description, LocalDateTime startDate, LocalDateTime endDate) {
+            this.id = id;
+            this.duration = duration;
+            this.description = description;
+            this.startDate = startDate;
+            this.endDate = endDate;
+    }
+
+
+
 }

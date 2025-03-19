@@ -69,6 +69,8 @@ function updateData() {
         password: $("#password").val()
     };
 
+    console.log("Updating user:", user); // Log user data
+
     $.ajax({
         url: `http://localhost:8080/api/v1/user/update/${u_id}`,
         type: "PUT",
@@ -83,6 +85,7 @@ function updateData() {
         }
     });
 }
+
 
 function loadAllUsers() {
     $.ajax({

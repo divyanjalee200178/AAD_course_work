@@ -1,13 +1,18 @@
 package org.example.back_end.service.impl;
 
+import org.example.back_end.dto.ExamDTO;
+import org.example.back_end.dto.UserDTO;
 import org.example.back_end.entity.Exam;
 import org.example.back_end.repo.ExamRepo;
 import org.example.back_end.service.ExamService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -15,21 +20,42 @@ public class ExamServiceImpl implements ExamService {
     @Autowired
     private ExamRepo examRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public boolean createExam(Exam exam) {
         examRepository.save(exam);
         return true;
     }
 
-    @Override
-    public List<Exam> getAllExams() {
-        return examRepository.findAll();
+    public List<ExamDTO> getAllExams() {
+        List<Exam> exams = examRepository.findAll();
+        return exams.stream()
+                .map(exam -> new ExamDTO(exam.getId(), exam.getDuration(), exam.getDescription(), exam.getStartDate(), exam.getEndDate()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Exam getExamById(Integer id) {
         Optional<Exam> exam = examRepository.findById(id);
-        return exam.orElse(null); // Return null if exam not found
+        return exam.orElse(null);
+    }
+
+    public int getNextExamId() {
+        List<Integer> allIds = examRepository.findAllIds();
+
+        if (allIds.isEmpty()) {
+            return 1;
+        }
+
+        for (int i = 1; i <= allIds.size(); i++) {
+            if (!allIds.contains(i)) {
+                return i;
+            }
+        }
+
+        return allIds.size() + 1;
     }
 
     @Override

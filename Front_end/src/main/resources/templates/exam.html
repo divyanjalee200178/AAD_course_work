@@ -5,52 +5,38 @@
     <title>Exam Manage</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/examStyle.css">
+
 </head>
 <body>
 
 <form class="row g-3" id="examForm">
     <h2>Exam Manage</h2>
-
-    <!-- Exam ID Field -->
     <div class="col-md-6">
         <label for="exam_id" class="form-label">Exam ID:</label>
-        <input type="text" class="form-control" id="exam_id" readonly>
+        <input type="text" class="form-control" id="exam_id" required>
     </div>
-
-    <!-- Exam Duration Field -->
     <div class="col-md-6">
         <label for="duration" class="form-label">Duration:</label>
         <input type="text" class="form-control" id="duration" placeholder="Enter exam duration">
     </div>
-
-    <!-- Exam Description Field -->
     <div class="col-md-6">
         <label for="description" class="form-label">Description:</label>
         <textarea class="form-control" id="description" placeholder="Enter exam description"></textarea>
     </div>
-
-    <!-- Exam Start Date -->
     <div class="col-md-6">
         <label for="startDate" class="form-label">Start Date:</label>
         <input type="datetime-local" class="form-control" id="startDate">
     </div>
-
-    <!-- Exam End Date -->
     <div class="col-md-6">
         <label for="endDate" class="form-label">End Date:</label>
         <input type="datetime-local" class="form-control" id="endDate">
     </div>
-
-    <!-- Actions: Save, Update, Delete -->
     <div class="col-12">
         <button type="button" class="btn btn-primary" onclick="saveExam()">Save</button>
         <button type="button" class="btn btn-warning" onclick="updateExam()">Update</button>
         <button type="button" class="btn btn-danger" onclick="deleteExam()">Delete</button>
         <button type="button" class="btn btn-info" onclick="viewExams()">View Exams</button>
     </div>
-
-    <!-- Exams Table -->
     <div class="col-md-12 mt-4">
         <table class="table table-bordered">
             <thead>
@@ -63,20 +49,24 @@
             </tr>
             </thead>
             <tbody id="examTableBody">
-            <!-- Dynamic Data Rows will be injected here -->
             </tbody>
         </table>
     </div>
-
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script src="../js/jquery-3.7.1.min.js"></script>
-<script src="../js/examManage.js"></script>
+
 
 <script>
+
+    $(document).ready(function () {
+        loadNextExamId();
+
+    });
+
     function saveExam() {
         const exam = {
             duration: $('#duration').val(),
@@ -92,7 +82,8 @@
             data: JSON.stringify(exam),
             success: function(response) {
                 alert("Exam created successfully!");
-                viewExams();
+                // viewExams();
+                loadNextExamId();
             },
             error: function() {
                 alert("Error creating exam!");
@@ -100,15 +91,31 @@
         });
     }
 
+    function loadNextExamId() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/exam/next-id",
+            method: "GET",
+            success: function(response) {
+                $('#exam_id').val(response);
+            },
+            error: function() {
+                alert("Error loading exam ID!");
+            }
+        });
+    }
 
     function viewExams() {
         $.ajax({
-            url: "http://localhost:8080/api/v1/exam/getAllExams",
+            url: "http://localhost:8080/api/v1/exam/get",
             method: "GET",
             success: function(response) {
-                let tableContent = "";
-                response.forEach(exam => {
-                    tableContent += `
+                console.log("API response:", response);
+                let tableBody = $("#examTableBody");
+                tableBody.empty();
+                if (response && Array.isArray(response)) {
+                    response.forEach(exam => {
+                        console.log("Exam data:", exam);
+                        tableBody.append(`
                         <tr>
                             <td>${exam.id}</td>
                             <td>${exam.duration}</td>
@@ -116,9 +123,11 @@
                             <td>${exam.startDate}</td>
                             <td>${exam.endDate}</td>
                         </tr>
-                    `;
-                });
-                $('#examTableBody').html(tableContent);
+                    `);
+                    });
+                } else {
+                    alert("No exams found.");
+                }
             },
             error: function() {
                 alert("Error fetching exams!");
@@ -150,7 +159,6 @@
             }
         });
     }
-
 
     function deleteExam() {
         const examId = $('#exam_id').val();

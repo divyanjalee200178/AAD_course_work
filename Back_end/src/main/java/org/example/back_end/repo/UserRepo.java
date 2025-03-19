@@ -6,10 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
     @Query("SELECT u.u_id FROM User u")
     List<Integer> findAllIds();
+    
+
+
 }

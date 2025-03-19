@@ -28,6 +28,19 @@ public class UserServiceImpl implements UserService {
         userRepo.save(user);
         return true;
     }
+    public boolean updatePassword(int u_id, String newPassword) {
+        User user = userRepo.findById(u_id).orElse(null);
+
+        if (user != null) {
+
+            user.setPassword(newPassword);
+            userRepo.save(user);
+            return true;
+        }
+
+        return false;
+    }
+
 
     public int getNextUserId() {
         List<Integer> allIds = userRepo.findAllIds();
@@ -50,18 +63,26 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userRepo.findAll(),new TypeToken<List<UserDTO>>() {}.getType());
     }
 
-    public List<UserDTO> updateUsers(int u_id,UserDTO userDTO){
-        User user=userRepo.findById(u_id).get();
+    public List<UserDTO> updateUsers(int u_id, UserDTO userDTO) {
+        User user = userRepo.findById(u_id).orElse(null);
+        if (user != null) {
+            user.setName(userDTO.getName());
+            user.setContact(userDTO.getContact());
+            user.setAddress(userDTO.getAddress());
+            user.setEmail(userDTO.getEmail());
+            user.setRole(userDTO.getRole());
+            user.setPassword(userDTO.getPassword());
 
-        user.setName(userDTO.getName());
-        user.setContact(userDTO.getContact());
-        user.setAddress(userDTO.getAddress());
-        user.setEmail(userDTO.getEmail());
-        user.setRole(userDTO.getRole());
-        user.setPassword(userDTO.getPassword());
+            System.out.println("Updated User: " + user);
+
+            userRepo.save(user);
+        } else {
+            System.out.println("User not found with ID: " + u_id);
+        }
 
         return getAllUsers();
     }
+
 
     public boolean deleteUser(int u_id) {
         if (userRepo.existsById(u_id)){

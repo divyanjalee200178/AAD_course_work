@@ -1,29 +1,25 @@
-package org.example.back_end.entity;
+package org.example.back_end.dto;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.example.back_end.entity.Exam;
+import org.example.back_end.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
-public class Result {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+@Setter
+
+public class ResultDTO {
+
     private Integer id;
     private String msg;
     private String totalMark;
 
-    @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
     private Exam exam;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private User student;
-
 //    @ManyToOne
 //    @JoinColumn(name = "student_id")
 //    private User student; // User entity representing the student

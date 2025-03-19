@@ -1,5 +1,7 @@
 package org.example.back_end.controller;
 
+import org.example.back_end.dto.ExamDTO;
+import org.example.back_end.dto.UserDTO;
 import org.example.back_end.entity.Exam;
 import org.example.back_end.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +28,22 @@ public class ExamController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating exam.");
     }
 
-    @GetMapping("/getAllExams")
-    public ResponseEntity<List<Exam>> getAllExams() {
-        return ResponseEntity.ok(examService.getAllExams());
+    @GetMapping("/get")
+    public List<ExamDTO> getExams() {
+        List<ExamDTO> exams = examService.getAllExams();
+        System.out.println("Returning exams: " + exams);
+        return exams;
     }
+
 
     @GetMapping("/getExam/{id}")
     public ResponseEntity<Exam> getExamById(@PathVariable Integer id) {
         return ResponseEntity.ok(examService.getExamById(id));
+    }
+
+    @GetMapping("/next-id")
+    public ResponseEntity<Integer> getNextExamId() {
+        return ResponseEntity.ok(examService.getNextExamId());
     }
 
     @PutMapping("/update/{id}")

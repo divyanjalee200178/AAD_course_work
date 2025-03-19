@@ -6,12 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>Dashboard - SB Admin</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="../css/adminDashboard.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-
-
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -49,7 +47,27 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
                             </a>
+
+                            <a class="nav-link" href="../templates/user.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                User Manage
+                            </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
+<!--                            **********************************************************************************-->
+<!--                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">-->
+<!--                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>-->
+<!--                                Manage-->
+<!--                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>-->
+<!--                            </a>-->
+<!--                            <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">-->
+<!--                                <nav class="sb-sidenav-menu-nested nav">-->
+<!--                                    <a class="nav-link" href="../templates/user.html">User Manage</a>-->
+<!--                                    <a class="nav-link" href="../templates/subject.html">Subject Manage</a>-->
+<!--                                    <a class="nav-link" href="../templates/exam.html">Exam Manage</a>-->
+<!--                                    <a class="nav-link" href="../templates/result.html">Result Manage</a>-->
+<!--                                </nav>-->
+<!--                            </div>-->
+<!--****************************************************************-->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Layouts
@@ -57,10 +75,16 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="../templates/user.html">User Manage</a>
+                                    <a class="nav-link" href="../templates/subject.html">Subject Manage</a>
+                                    <a class="nav-link" href="../templates/exam.html">Exam Manage</a>
+                                    <a class="nav-link" href="../templates/result.html">Result Manage</a>
                                     <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
                             </div>
+
+<!--********************************************************************************************************************************************************************-->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Pages
@@ -75,7 +99,7 @@
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="../templates/login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
+                                            <a class="nav-link" href="../templates/register.html">Register</a>
                                             <a class="nav-link" href="password.html">Forgot Password</a>
                                         </nav>
                                     </div>
@@ -90,8 +114,13 @@
                                             <a class="nav-link" href="500.html">500 Page</a>
                                         </nav>
                                     </div>
+
+
                                 </nav>
                             </div>
+<!--*************************************************************************************************************************************************************-->
+
+
                             <div class="sb-sidenav-menu-heading">Addons</div>
                             <a class="nav-link" href="charts.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
@@ -112,16 +141,66 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Tables</h1>
+                        <h1 class="mt-4">Dashboard</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="dash.html">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Tables</li>
+                            <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-                                <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
-                                .
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Success Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        Income Area Chart
+                                    </div>
+                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        Bar Chart Example
+                                    </div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                </div>
                             </div>
                         </div>
                         <div class="card mb-4">
@@ -132,22 +211,32 @@
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
-                                    <tr>
-                                        <th>Exam ID</th>
-                                        <th>Duration</th>
-                                        <th>Description</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
                                     </thead>
-                                    <tbody id="examTableBody">
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+
                                     </tbody>
                                 </table>
-
-                            </div>
                             </div>
                         </div>
-
+                    </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -165,47 +254,10 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../js/option/scripts.js"></script>
-        <script src="../js/jquery-3.7.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="../demo/chart-area-demo.js"></script>
+        <script src="../demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="../js/option/datatables-simple-demo.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            viewExams();
-        });
-        function viewExams() {
-            $.ajax({
-                url: "http://localhost:8080/api/v1/exam/get",
-                method: "GET",
-                success: function(response) {
-                    console.log("API response:", response);
-                    let tableBody = $("#examTableBody");
-                    tableBody.empty();
-                    if (response && Array.isArray(response)) {
-                        response.forEach(exam => {
-                            console.log("Exam data:", exam);
-                            tableBody.append(`
-                        <tr>
-                            <td>${exam.id}</td>
-                            <td>${exam.duration}</td>
-                            <td>${exam.description}</td>
-                            <td>${exam.startDate}</td>
-                            <td>${exam.endDate}</td>
-                        </tr>
-                    `);
-                        });
-                    } else {
-                        alert("No exams found.");
-                    }
-                },
-                error: function() {
-                    alert("Error fetching exams!");
-                }
-            });
-        }
-
-    </script>
-
-
     </body>
 </html>

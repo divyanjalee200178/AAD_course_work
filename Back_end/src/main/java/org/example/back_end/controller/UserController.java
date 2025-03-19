@@ -29,6 +29,21 @@ public class UserController {
         }
     }
 
+    @PostMapping("reset")
+    public ResponseUtil resetPassword(@RequestBody UserDTO userDTO) {
+        try {
+            boolean res = userService.updatePassword(userDTO.getU_id(), userDTO.getPassword());
+            if (res) {
+                return new ResponseUtil(200, "Password updated successfully", null);
+            } else {
+                return new ResponseUtil(404, "User not found", null);
+            }
+        } catch (Exception e) {
+            return new ResponseUtil(500, "Error updating password: " + e.getMessage(), null);
+        }
+    }
+
+
     @GetMapping("next-id")
     public int getNextSubjectId() {
         return userService.getNextUserId();

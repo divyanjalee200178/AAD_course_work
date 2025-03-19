@@ -76,6 +76,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
 
+
     public List<SubjectDTO> updateSubject(int id, SubjectDTO subjectDTO) {
         Subject subject = subjectRepo.findById(id).get();
         subject.setName(subjectDTO.getName());

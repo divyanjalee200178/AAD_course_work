@@ -22,10 +22,10 @@ public class Exam {
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions;  // The list of questions in this exam
+    private List<Question> questions;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Result> answers;  // T
+    private List<Result> answers;
 
 
 }
