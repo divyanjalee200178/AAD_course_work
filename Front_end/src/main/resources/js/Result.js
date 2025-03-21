@@ -1,6 +1,6 @@
 $(document).ready(function () {
     loadStudentIds();
-    loadExamIds();
+    // loadExamIds();
 
     loadNextResultId();
 });
