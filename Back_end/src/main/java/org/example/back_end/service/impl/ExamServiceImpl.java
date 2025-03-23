@@ -37,6 +37,11 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public List<Integer> getAllExamIds() {
+        return examRepository.findAllIds();
+    }
+
+    @Override
     public Exam getExamById(Integer id) {
         Optional<Exam> exam = examRepository.findById(id);
         return exam.orElse(null);

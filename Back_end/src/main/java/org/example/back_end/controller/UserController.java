@@ -43,6 +43,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("get-ids-by-role")
+    public List<Integer> getUserIdsByRole() {
+        return userService.getUserIdsByRole();
+    }
+
 
     @GetMapping("next-id")
     public int getNextSubjectId() {

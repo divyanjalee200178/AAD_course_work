@@ -57,6 +57,9 @@ public class UserServiceImpl implements UserService {
         return allIds.size() + 1;
     }
 
+    public List<Integer> getUserIdsByRole() {
+        return userRepo.findAllIdsByRole();
+    }
 
 
     public List<UserDTO> getAllUsers(){

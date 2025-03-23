@@ -6,6 +6,7 @@
     <title>Exam Question Management</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
 
@@ -14,7 +15,10 @@
 
     <div class="mb-3">
         <label for="questionId">Question ID:</label>
-        <input type="text" id="questionId" class="form-control mb-2" required>
+        <input type="text" id="questionId" class="form-control mb-2" placeholder="Auto Generated" disabled>
+
+        <label for="name" class="form-label">Name :</label>
+        <input type="text" id="name" class="form-control mb-2" placeholder="Question name" required>
 
         <label for="content" class="form-label">Content :</label>
         <input type="text" id="content" class="form-control mb-2" placeholder="Question Content" required>
@@ -38,27 +42,47 @@
         <input type="text" id="answer" class="form-control mb-2" placeholder="Correct Answer" required>
 
         <label for="examId" class="form-label">Exam ID:</label>
-        <input type="number" id="examId" class="form-control mb-2" placeholder="Exam ID" required>
+        <select id="examId" class="form-control mb-2" required>
+            <option value="" disabled selected>Select Exam</option>
+        </select>
 
         <label for="userId" class="form-label">User ID:</label>
-        <input type="number" id="userId" class="form-control mb-2" placeholder="User ID" required>
+        <select id="userId" class="form-control mb-2" required>
+            <option value="" disabled selected>Select User</option> <!-- Placeholder -->
+        </select>
 
         <button class="btn btn-primary" onclick="handleSubmitData()">Add Question</button>
+        <button class="btn btn-secondary" onclick="duplicateQuestion()">Duplicate Question</button>
 
         <button class="btn btn-warning" onclick="handleUpdate()">Update Question</button>
         <button class="btn btn-danger" onclick="clearForm()">Clear Form</button>
+
+
+
+        <input type="text" id="searchKeyword" placeholder="Enter keyword">
+        <button onclick="generateExamPaper()">Generate Paper</button>
+
+        <!-- Exam Paper Display Section -->
+        <div id="examPaper" class="container mt-4" style="display: none; padding: 20px; font-family: Arial;">
+            <h2 style="text-align: center; font-weight: bold;">Exam Paper</h2>
+            <hr>
+            <div id="paperContent"></div>
+        </div>
+
+
     </div>
 
-    <h3>Search Questions</h3>
-    <input type="number" id="searchMcqNumber" class="form-control mb-2" placeholder="Enter MCQ Number">
-    <button class="btn btn-info" onclick="fetchQuestionsByMcq()">Search</button>
 
     <table class="table table-bordered mt-3">
         <thead>
         <tr>
             <th>MCQ Number</th>
+            <th>Name</th>
             <th>Content</th>
-            <th>Options</th>
+            <th>Option1</th>
+            <th>Option2</th>
+            <th>Option3</th>
+            <th>Option4</th>
             <th>Answer</th>
             <th>Exam ID</th>
             <th>User ID</th>
@@ -69,55 +93,164 @@
     </table>
 </div>
 
+<script src="../js/jquery-3.7.1.min.js"></script>
+
 <script>
-    $(document).ready(function () {
-        fetchQuestionsByMcq();
+
+    $(document).ready(function() {
+    loadAllSubjects();
+        $.ajax({
+            url: "http://localhost:8080/api/v1/user/get-ids-by-role",
+            method: "GET",
+            success: function(data) {
+                let userIdSelect = $("#userId"); // Assuming this is the combo box for user IDs
+                data.forEach(userId => {
+                    userIdSelect.append(new Option(userId, userId));
+                });
+            },
+            error: function() {
+                alert("Failed to fetch user IDs!");
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/exam/getAllExamIds",
+            method: "GET",
+            success: function(data) {
+                let examIdSelect = $("#examId");
+                data.forEach(examId => {
+                    examIdSelect.append(new Option(examId, examId));
+                });
+            },
+            error: function() {
+                alert("Failed to fetch exam IDs!");
+            }
+        });
+
+        loadAllSubjects();
+
+        $('#questionTableBody').on('click', 'tr', function () {
+            var mcqNumber = $(this).find('td:eq(0)').text();
+            var name = $(this).find('td:eq(1)').text();
+            var content = $(this).find('td:eq(2)').text();
+            var option1 = $(this).find('td:eq(3)').text();
+            var option2 = $(this).find('td:eq(4)').text();
+            var option3 = $(this).find('td:eq(5)').text();
+            var option4 = $(this).find('td:eq(6)').text();
+            var answer = $(this).find('td:eq(7)').text();
+            var examId = $(this).find('td:eq(8)').text();
+            var userId = $(this).find('td:eq(9)').text();
+
+            // Set the values in the form
+            $("#questionId").val(""); // Auto-generated, not editable
+            $("#name").val(name);
+            $("#content").val(content);
+            $("#option1").val(option1);
+            $("#option2").val(option2);
+            $("#option3").val(option3);
+            $("#option4").val(option4);
+            $("#mcqNumber").val(mcqNumber);
+            $("#answer").val(answer);
+            $("#examId").val(examId);
+            $("#userId").val(userId);
+        });
+
     });
 
+    function duplicateQuestion() {
+        let selectedExamId = $("#examId").val();
+        let selectedName = $("#name").val();
+
+        if (!selectedExamId || !selectedName) {
+            alert("Please select an exam and enter a question name before duplicating.");
+            return;
+        }
+
+        clearForm();
+
+
+        $("#examId").val(selectedExamId);
+        $("#name").val(selectedName);
+    }
+
+
+    function handleSubmitData() {
+        const questionData = {
+            content: $("#content").val(),
+            option1: $("#option1").val(),
+            option2: $("#option2").val(),
+            option3: $("#option3").val(),
+            option4: $("#option4").val(),
+            name: $("#name").val(),
+            mcqNumber: parseInt($("#mcqNumber").val()),
+            answer: $("#answer").val(),
+            examId: parseInt($("#examId").val()),
+            userId: parseInt($("#userId").val())
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/questions/post",
+            method: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(questionData),
+            success: function (response) {
+                alert("Question added successfully!");
+                fetchQuestionsByMcq();
+                clearForm();
+            },
+            error: function (xhr) {
+                alert("Error: " + xhr.responseText);
+            }
+        });
+    }
 
     function fetchQuestionsByMcq() {
-        const mcqNumber = $('#searchMcqNumber').val();
-        if (!mcqNumber) {
-            alert('Please enter an MCQ Number to search.');
+        let mcqNumber = $("#mcqNumber").val();
+
+        if (!mcqNumber || isNaN(mcqNumber)) {
+            alert("Please enter a valid MCQ Number!");
             return;
         }
 
         $.ajax({
             url: `http://localhost:8080/api/v1/questions/mcq/${mcqNumber}`,
-            method: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                const tableBody = $('#questionTableBody');
-                tableBody.empty();
-
-                if (data.length === 0) {
-                    alert('No questions found for the given MCQ Number.');
-                    return;
-                }
-
-                data.forEach(question => {
-                    tableBody.append(`
-                    <tr>
-                        <td>${question.mcqNumber}</td>
-                        <td>${question.content}</td>
-                        <td>${question.option1}, ${question.option2}, ${question.option3}, ${question.option4}</td>
-                        <td>${question.answer}</td>
-                        <td>${question.examId}</td>
-                        <td>${question.userId}</td>
-                        <td>
-                            <button class="btn btn-warning" onclick="editQuestion(${question.id})">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteQuestion(${question.id})">Delete</button>
-                        </td>
-                    </tr>
-                `);
-                });
+            method: "GET",
+            success: function(data) {
+                console.log(data);  // Log the response data
+                displayQuestions(data);
             },
-            error: function () {
-                alert('Error fetching questions. Please try again.');
+            error: function(xhr, status, error) {
+                console.error("Error details: ", xhr.responseText, status, error);
+                alert("Failed to fetch questions!");
             }
         });
     }
-    function handleSubmitData() {
+
+    function editQuestion(id) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/questions/${id}`,
+            method: "GET",
+            success: function (q) {
+                $("#questionId").val(q.id);
+                $("#content").val(q.content);
+                $("#option1").val(q.option1);
+                $("#option2").val(q.option2);
+                $("#option3").val(q.option3);
+                $("#option4").val(q.option4);
+                $("#mcqNumber").val(q.mcqNumber);
+                $("#answer").val(q.answer);
+                $("#examId").val(q.examId);
+                $("#userId").val(q.userId);
+            },
+            error: function () {
+                alert("Failed to fetch question!");
+            }
+        });
+    }
+
+    function handleUpdate() {
+        let id = $("#questionId").val();
         const questionData = {
             content: $("#content").val(),
             option1: $("#option1").val(),
@@ -130,122 +263,157 @@
             userId: parseInt($("#userId").val())
         };
 
-
-        if (!questionData.content || !questionData.option1 || !questionData.option2 || !questionData.option3 || !questionData.option4 || !questionData.answer) {
-            alert("Please fill in all fields!");
-            return;
-        }
-
-        console.log("Sending question data:", JSON.stringify(questionData));
-
         $.ajax({
-            url: "http://localhost:8080/api/v1/questions/post",
-            method: "POST",
+            url: `http://localhost:8080/api/v1/questions/update/${id}`,
+            method: "PUT",
             contentType: "application/json",
-            dataType: "json",
             data: JSON.stringify(questionData),
-            success: function (response) {
-                alert("Question added successfully!");
-                console.log("Success:", response);
+            success: function () {
+                alert("Question updated successfully!");
                 fetchQuestionsByMcq();
                 clearForm();
             },
-            error: function (xhr, status, error) {
-                try {
-                    let response = JSON.parse(xhr.responseText);
-                    alert("Error: " + response.message);
-                    console.log("Error:", response);
-                } catch (e) {
-                    alert("Unexpected error occurred!");
-                    console.log("Parsing error:", e);
+            error: function () {
+                alert("Failed to update question!");
+            }
+        });
+    }
+
+    function deleteQuestion(id) {
+        if (confirm("Are you sure to delete this question?")) {
+            $.ajax({
+                url: `http://localhost:8080/api/v1/questions/delete/${id}`,
+                method: "DELETE",
+                success: function () {
+                    alert("Question deleted successfully!");
+                    fetchQuestionsByMcq();
+                },
+                error: function () {
+                    alert("Failed to delete question!");
                 }
-            }
-        });
-    }
-
-    function handleUpdate() {
-        const questionId = $('#questionId').val();
-        if (!questionId) {
-            alert('Please select a question to update.');
-            return;
+            });
         }
+    }
 
-        const question = getQuestionData();
-        if (!question) return;
-
+    function loadAllSubjects() {
         $.ajax({
-            url: `http://localhost:8080/api/v1/questions/${questionId}`,
-            method: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(question),
-            success: function () {
-                alert('Question updated successfully');
-                clearForm();
-                fetchQuestionsByMcq();
+            url: "http://localhost:8080/api/v1/questions/get",
+            type: "GET",
+                success: function (data) {
+                    console.log(data); // Log the response to check its structure
+                    let tableBody = $("#questionTableBody");
+                    tableBody.empty();
+
+                    data.forEach(subject => {
+                        let userIdDisplay = subject.userId ? subject.userId : 'Not Assigned';
+
+                        let row = `
+            <tr>
+                <td>${subject.mcqNumber}</td>
+                <td>${subject.name}</td>
+                <td>${subject.content}</td>
+                <td>${subject.option1}</td>
+                <td>${subject.option2}</td>
+                <td>${subject.option3}</td>
+                <td>${subject.option4}</td>
+                <td>${subject.answer}</td>
+                <td>${subject.examId}</td>
+                <td>${userIdDisplay}</td>
+                <td>
+                    <button class="btn btn-info" onclick="viewQuestion(${subject.id})">View</button>
+                    <button class="btn btn-warning" onclick="editQuestion(${subject.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteQuestion(${subject.id})">Delete</button>
+                </td>
+            </tr>`;
+
+                        tableBody.append(row);
+                    });
+
             },
             error: function () {
-                alert('Error updating question. Please try again.');
+                alert("Error loading subjects.");
             }
         });
     }
 
-
-    function deleteQuestion(questionId) {
-        if (!confirm('Are you sure you want to delete this question?')) return;
-
+    function fetchAllQuestions() {
         $.ajax({
-            url: `http://localhost:8080/api/v1/questions/${questionId}`,
-            method: 'DELETE',
-            success: function () {
-                alert('Question deleted successfully');
-                fetchQuestionsByMcq();
+            url: "http://localhost:8080/api/v1/questions/mcq/1", // Replace with the correct MCQ number if needed
+            method: "GET",
+            success: function(data) {
+                displayQuestions(data);
             },
-            error: function () {
-                alert('Error deleting question. Please try again.');
+            error: function() {
+                alert("Failed to fetch questions!");
             }
         });
     }
 
-    function editQuestion(questionId) {
-        $.ajax({
-            url: `http://localhost:8080/api/v1/questions/${questionId}`,
-            method: 'GET',
-            success: function (data) {
-                $('#questionId').val(data.id);
-                $('#content').val(data.content);
-                $('#option1').val(data.option1);
-                $('#option2').val(data.option2);
-                $('#option3').val(data.option3);
-                $('#option4').val(data.option4);
-                $('#mcqNumber').val(data.mcqNumber);
-                $('#answer').val(data.answer);
-                $('#examId').val(data.examId);
-                $('#userId').val(data.userId);
-            },
-            error: function () {
-                alert('Error fetching question details.');
-            }
+    function displayQuestions(questions) {
+        let tableBody = $("#questionTableBody");
+        tableBody.empty(); // Clear any existing rows in the table
+
+        questions.forEach(q => {
+            let row = `<tr>
+                    <td>${q.mcqNumber}</td>
+                    <td>${q.name}</td>
+                    <td>${q.content}</td>
+                    <td>${q.option1}</td>
+                    <td>${q.option2}</td>
+                    <td>${q.option3}</td>
+                    <td>${q.option4}</td>
+                    <td>${q.answer}</td>
+                    <td>${q.exam.id}</td>
+                    <td>${q.user.id}</td>
+                    <td>
+                        <button class="btn btn-info" onclick="viewQuestion(${q.id})">View</button>
+                        <button class="btn btn-warning" onclick="editQuestion(${q.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteQuestion(${q.id})">Delete</button>
+                    </td>
+                   </tr>`;
+            tableBody.append(row);
         });
     }
+
 
     function clearForm() {
-        $('#questionId, #content, #option1, #option2, #option3, #option4, #mcqNumber, #answer, #examId, #userId').val('');
+        $("#questionId, #content, #option1, #option2, #option3, #option4, #mcqNumber, #answer, #examId, #userId").val("");
     }
 
-    function getQuestionData() {
-        return {
-            id: $('#questionId').val() || null,
-            content: $('#content').val(),
-            option1: $('#option1').val(),
-            option2: $('#option2').val(),
-            option3: $('#option3').val(),
-            option4: $('#option4').val(),
-            mcqNumber: parseInt($('#mcqNumber').val()),
-            answer: $('#answer').val(),
-            examId: parseInt($('#examId').val()),
-            userId: parseInt($('#userId').val())
-        };
+
+    function generateExamPaper() {
+        let keyword = document.getElementById("searchKeyword").value;
+        fetch(`http://localhost:8080/api/v1/questions/search?keyword=${keyword}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetched Questions:", data);  // ✅ Debugging step
+                if (!Array.isArray(data) || data.length === 0) {
+                    document.getElementById("examPaper").innerHTML = "<p>No matching questions found.</p>";
+                    return;
+                }
+
+                let paperHTML = "<h3>Answer all the questions</h3><br>";
+                data.forEach((q, index) => {
+                    paperHTML += `
+                    <div style="margin-bottom: 15px;">
+                        <p><strong>${index + 1}. ${q.name}</strong></p>
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li>a) ${q.option1}</li>
+                            <li>b) ${q.option2}</li>
+                            <li>c) ${q.option3}</li>
+                            <li>d) ${q.option4}</li>
+                        </ul>
+                    </div>
+                    <hr>
+                `;
+                });
+
+                document.getElementById("examPaper").innerHTML = paperHTML;
+                document.getElementById("examPaper").style.display = "block";
+            })
+            .catch(error => console.error("Error fetching questions:", error));
     }
+
 </script>
 
 </body>

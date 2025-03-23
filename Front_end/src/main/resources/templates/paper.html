@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Paper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .header {
+            background-color: maroon;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">Exam Paper</div>
+
+<div class="container" id="examPaper">
+    <!-- Questions will be inserted here dynamically -->
+</div>
+
+<button onclick="checkAnswers()">Submit</button>
+
+<div id="result" class="result"></div>
+
+<div class="footer">
+    www.examportal.com | Page 1
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+
+    let questionsData = [];
+    async function fetchQuestions() {
+        try {
+            console.log("Fetching questions...");
+
+            const response = await fetch("http://localhost:8080/api/v1/question/get");
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const text = await response.text();  // Get raw response
+            console.log("Raw API Response:", text);  // Log response to console
+
+            const questions = JSON.parse(text);  // Parse JSON
+            console.log("Parsed Questions:", questions);
+
+            let paperDiv = document.getElementById("examPaper");
+            let paperHTML = "<h3>Answer all the questions</h3><br>";
+
+            if (questions.length === 0) {
+                paperHTML += "<p>No questions available.</p>";
+            } else {
+                questions.forEach((q) => {
+                    paperHTML += `
+                <div class="question">
+                    <p>${q.mcqNumber}. ${q.content}</p>
+                    <div class="options">
+                        <label><input type="radio" name="q${q.qid}" value="1"> a) ${q.option1}</label><br>
+                        <label><input type="radio" name="q${q.qid}" value="2"> b) ${q.option2}</label><br>
+                        <label><input type="radio" name="q${q.qid}" value="3"> c) ${q.option3}</label><br>
+                        <label><input type="radio" name="q${q.qid}" value="4"> d) ${q.option4}</label>
+                    </div>
+                </div>
+                <hr>
+            `;
+                });
+            }
+
+            paperDiv.innerHTML = paperHTML;
+
+        } catch (error) {
+            console.error("Error fetching questions:", error);
+        }
+    }
+
+    async function checkAnswers() {
+        let userAnswers = {};
+
+        questionsData.forEach((q) => {
+            let selectedAnswer = document.querySelector(`input[name="q${q.qid}"]:checked`);
+            if (selectedAnswer) {
+                userAnswers[q.qid] = selectedAnswer.value; // Store selected answer
+            }
+        });
+
+        try {
+            const response = await fetch("http://localhost:8080/api/v1/question/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userAnswers)
+            });
+
+            const result = await response.json();
+            document.getElementById("result").innerHTML = `You scored ${result.score} out of ${result.total}`;
+        } catch (error) {
+            console.error("Error submitting answers:", error);
+        }
+    }
+
+    fetchQuestions();
+
+
+    // Run when the page loads
+    document.addEventListener("DOMContentLoaded", fetchQuestions);
+</script>
+
+</body>
+</html>

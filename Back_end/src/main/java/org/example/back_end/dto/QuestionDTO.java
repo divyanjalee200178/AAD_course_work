@@ -12,30 +12,15 @@ import org.example.back_end.entity.User;
 @NoArgsConstructor
 @Data
 public class QuestionDTO {
-    private Long qid;
-
-    @NotNull
+    private String name;
     private String content;
-
-    private int mcqNumber;
-
-    @NotNull
     private String option1;
-
-    @NotNull
     private String option2;
-
-    @NotNull
     private String option3;
-
-    @NotNull
     private String option4;
-
-    @NotNull
     private String answer;
-
-    private Exam exam;
-
-    private User user;
+    private int mcqNumber;
+    private int examId;
+    private int userId;
 
 }

@@ -1,5 +1,6 @@
 package org.example.back_end.service;
 
+import org.example.back_end.dto.QuestionDTO;
 import org.example.back_end.entity.Question;
 
 import java.util.List;
@@ -12,5 +13,12 @@ public interface QuestionService {
     Set<Question> getQuestions();
     Question getQuestion(Long questionId);
     List<Question> getQuestionsByMcq(int mcqNumber);
-    List<Question> findQuestionsByMcqNumber(int mcqNumber);  // Method definition to find questions by MCQ number
+    List<Question> findQuestionsByMcqNumber(int mcqNumber);
+
+    List<Question> findByName(String name);
+
+    public List<QuestionDTO> getAllQuestions();
+
+    public List<Question> getAllQuestion();
+    public List<Question> getQuestionsByExam(Long examId);
 }

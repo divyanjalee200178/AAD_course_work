@@ -41,6 +41,13 @@ public class ExamController {
         return ResponseEntity.ok(examService.getExamById(id));
     }
 
+    @GetMapping("/getAllExamIds")
+    public ResponseEntity<List<Integer>> getAllExamIds() {
+        List<Integer> examIds = examService.getAllExamIds();
+        return ResponseEntity.ok(examIds);
+    }
+
+
     @GetMapping("/next-id")
     public ResponseEntity<Integer> getNextExamId() {
         return ResponseEntity.ok(examService.getNextExamId());

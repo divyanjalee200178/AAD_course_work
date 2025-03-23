@@ -11,6 +11,7 @@ public interface ExamService {
         public boolean updateExam(Integer id, Exam exam);
         public boolean deleteExam(Integer id);
         public int getNextExamId();
+        public List<Integer> getAllExamIds();
 
 
 }

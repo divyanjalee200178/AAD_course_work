@@ -16,6 +16,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long qid;
 
+    private String name;
+
     @NotNull
     private String content;
 
