@@ -69,11 +69,13 @@ public class PaperServiceImpl implements PaperService {
         }).collect(Collectors.toList());
     }
 
-
-
-
     public List<QuestionDTO> getQuestionsByExamId(Integer examId) {
         return questionRepository.findByExamId(examId);
+    }
+
+    @Override
+    public int getTotalQuestions() {
+        return (int) questionRepository.count(); // or any other logic to get the total number of questions
     }
 
     @Override

@@ -37,11 +37,45 @@ public class McqPaperController {
     }
 
 
+//    @PostMapping("/submit")
+//    public ResponseEntity<Integer> submitAnswers(@RequestBody Map<Integer, List<Integer>> userAnswers) {
+//        int score = paperService.calculateScore(userAnswers);
+//        return ResponseEntity.ok(score);
+//    }
+
     @PostMapping("/submit")
-    public ResponseEntity<Integer> submitAnswers(@RequestBody Map<Integer, List<Integer>> userAnswers) {
-        int score = paperService.calculateScore(userAnswers);
-        return ResponseEntity.ok(score);
+    public ResponseEntity<Map<String, Object>> submitAnswers(@RequestBody Map<Integer, List<Integer>> userAnswers) {
+        int score = paperService.calculateScore(userAnswers);  // Calculate score based on answers
+        int totalQuestions = paperService.getTotalQuestions(); // Total number of questions
+        double percentage = (score * 100.0) / totalQuestions;   // Calculate percentage (based on score and total questions)
+
+        // Calculate grade based on percentage
+        String grade = calculateGrade(percentage);
+
+        // Prepare the response object
+        Map<String, Object> result = new HashMap<>();
+        result.put("score", score);
+        result.put("totalQuestions", totalQuestions);
+        result.put("percentage", percentage);  // Send the percentage along with score and totalQuestions
+        result.put("grade", grade);  // Add grade to the result
+
+        return ResponseEntity.ok(result); // Return the result as a JSON response
     }
+
+    private String calculateGrade(double percentage) {
+        if (percentage >= 75) {
+            return "A";
+        } else if (percentage >= 65) {
+            return "B";
+        } else if (percentage >= 55) {
+            return "C";
+        } else if (percentage >= 40) {
+            return "S"; // S for Pass
+        } else {
+            return "F"; // Failed
+        }
+    }
+
 
     private int getTotalQuestions() {
 

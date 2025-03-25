@@ -48,6 +48,15 @@
     </style>
 </head>
 <body>
+<label for="examId" class="form-label">Exam ID:</label>
+<select id="examId" class="form-control mb-2" required>
+    <option value="" disabled selected>Select Exam</option>
+</select>
+
+<label for="userId" class="form-label">User ID:</label>
+<select id="userId" class="form-control mb-2" required>
+    <option value="" disabled selected>Select User</option> <!-- Placeholder -->
+</select>
 <div class="header">
     <h1>Exam Paper</h1>
 </div>
@@ -57,7 +66,12 @@
 <button onclick="submitAnswers()">Submit Answers</button>
 <div id="result" class="result"></div>
 
+<button onclick="saveResult()">Save Result</button>
+
 <script>
+
+
+
     let questionsData = []; // Store questions
     let answersData = {}; // Store selected answers
 
@@ -130,14 +144,105 @@
 
             if (!response.ok) throw new Error('Failed to submit answers');
 
-            const score = await response.json();
-            document.getElementById('result').innerText = `Your Score: ${score}`;
+            const result = await response.json();
+            const score = result.score; // Get the score from the response
+            const totalQuestions = result.totalQuestions; // Get the total number of questions
+            const percentage = result.percentage; // Get the percentage from the response
+            const grade = result.grade; // Get the grade from the response
+
+            // Display score, percentage, and grade
+            document.getElementById('result').innerHTML = `
+            <p>Your Score: ${score} out of ${totalQuestions}</p>
+            <p>Percentage: ${percentage.toFixed(2)}%</p>
+            <p>Grade: ${grade}</p>
+        `;
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('result').innerText = 'Error calculating score. Try again.';
         }
     }
 
+    async function loadExams() {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/exam/getAllExamIds');
+            if (!response.ok) throw new Error('Failed to load exams');
+
+            const examIds = await response.json();
+            const examSelect = document.getElementById('examId');
+            examIds.forEach(id => {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = ` ${id}`;
+                examSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function loadUsers() {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/user/get');
+            if (!response.ok) throw new Error('Failed to load users');
+
+            const users = await response.json();
+            const userSelect = document.getElementById('userId');
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.u_id;
+                option.textContent = ` ${user.u_id}`;
+                userSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadExams();
+        loadUsers();
+    });
+
+    async function saveResult() {
+        const userId = document.getElementById("userId").value;
+        const examId = document.getElementById("examId").value;
+
+        if (!userId || !examId) {
+            alert("Please select an exam and user before saving results.");
+            return;
+        }
+
+        // Ensure results are available
+        const scoreText = document.getElementById("result").querySelector("p:nth-child(1)")?.textContent || "";
+        const percentageText = document.getElementById("result").querySelector("p:nth-child(2)")?.textContent || "";
+        const gradeText = document.getElementById("result").querySelector("p:nth-child(3)")?.textContent || "";
+
+        // Extract values
+        const score = scoreText.split(": ")[1] || "0";
+        const percentage = percentageText.split(": ")[1]?.replace("%", "") || "0"; // Remove '%' sign
+        const grade = gradeText.split(": ")[1] || "N/A";
+
+        const resultData = {
+            msg: grade,
+            totalMark: percentage,
+            exam: { id: examId },
+            student: { u_id: userId }
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/results/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(resultData)
+            });
+
+            const result = await response.json();
+            alert("Saved successfully");
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to save result.');
+        }
+    }
 
 
     // Initialize when page loads

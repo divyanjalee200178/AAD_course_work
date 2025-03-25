@@ -1,6 +1,8 @@
 package org.example.back_end.controller;
 
 import org.example.back_end.dto.ResultDTO;
+import org.example.back_end.dto.ResultViewDTO;
+import org.example.back_end.dto.SubjectDTO;
 import org.example.back_end.service.ResultService;
 import org.example.back_end.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +22,24 @@ public class ResultController {
     @PostMapping("save")
     public ResponseUtil saveResult(@RequestBody ResultDTO resultDTO) {
         try {
+            // Print received data for debugging
             System.out.println("Received data: " + resultDTO);
-            boolean res = resultService.addResult(resultDTO);
+
+            // Ensure correct field mapping
+            if (resultDTO.getMsg() == null || resultDTO.getTotalMark() == null) {
+                return new ResponseUtil(400, "Invalid result data. Please submit answers first.", null);
+            }
+
+            boolean res = resultService.saveResult(resultDTO);
             if (res) {
                 return new ResponseUtil(201, "Result saved successfully", null);
             } else {
-                return new ResponseUtil(200, "Result already exists", null);
+                return new ResponseUtil(400, "Error: Could not save result.", null);
             }
         } catch (Exception e) {
             return new ResponseUtil(500, "Error saving Result: " + e.getMessage(), null);
         }
     }
-
 
 
     @GetMapping("next-id")
@@ -40,11 +48,10 @@ public class ResultController {
     }
 
     @GetMapping("get")
-    public List<ResultDTO> getResult(){
-        List<ResultDTO> resultDTOS=resultService.getAllResults();
-        return resultDTOS;
+    public List<ResultViewDTO> getResult() {
+        List<ResultViewDTO> results = resultService.getAllResults();
+        return results;
     }
-
 //    @PutMapping("update/{id}")
 //    public List<ResultDTO> updateResult(@PathVariable int id, @RequestBody ResultDTO resultDTO){
 //        return resultService.updateResult(id, resultDTO);
