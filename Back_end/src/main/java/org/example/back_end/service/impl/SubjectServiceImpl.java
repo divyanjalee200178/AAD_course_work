@@ -44,6 +44,7 @@ public class SubjectServiceImpl implements SubjectService {
         return true;
     }
 
+
     public int getNextSubjectId() {
         List<Integer> allIds = subjectRepo.findAllIds();
 

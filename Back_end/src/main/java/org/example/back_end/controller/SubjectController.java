@@ -30,6 +30,7 @@ public class SubjectController {
         }
     }
 
+
     @GetMapping("next-id")
     public int getNextSubjectId() {
         return subjectService.getNextSubjectId();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam Paper</title>
+    <title>Exam Portal</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,131 +13,135 @@
         .header {
             background-color: maroon;
             color: white;
-            padding: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 15px;
             text-align: center;
+            margin-bottom: 20px;
         }
         .container {
             border: 1px solid #ddd;
-            padding: 20px;
+            padding: 25px;
             max-width: 800px;
-            margin: auto;
+            margin: 0 auto;
         }
         .question {
-            margin-bottom: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
         }
-        .question p {
-            font-weight: bold;
+        .options label {
+            display: block;
+            margin: 10px 0;
         }
-        .options {
-            margin-left: 20px;
+        button {
+            background-color: maroon;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
         }
-        .footer {
+        .result {
             text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            color: gray;
+            font-size: 18px;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-
-<div class="header">Exam Paper</div>
-
-<div class="container" id="examPaper">
-    <!-- Questions will be inserted here dynamically -->
+<div class="header">
+    <h1>Exam Paper</h1>
 </div>
 
-<button onclick="checkAnswers()">Submit</button>
+<div class="container" id="examPaper"></div>
 
+<button onclick="submitAnswers()">Submit Answers</button>
 <div id="result" class="result"></div>
 
-<div class="footer">
-    www.examportal.com | Page 1
-</div>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
+    let questionsData = []; // Store questions
+    let answersData = {}; // Store selected answers
 
-    let questionsData = [];
-    async function fetchQuestions() {
+    // Fetch questions from API
+    async function loadQuestions() {
         try {
-            console.log("Fetching questions...");
+            const response = await fetch('http://localhost:8080/api/v1/question/get');
+            if (!response.ok) throw new Error('Failed to load questions');
 
-            const response = await fetch("http://localhost:8080/api/v1/question/get");
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const text = await response.text();  // Get raw response
-            console.log("Raw API Response:", text);  // Log response to console
-
-            const questions = JSON.parse(text);  // Parse JSON
-            console.log("Parsed Questions:", questions);
-
-            let paperDiv = document.getElementById("examPaper");
-            let paperHTML = "<h3>Answer all the questions</h3><br>";
-
-            if (questions.length === 0) {
-                paperHTML += "<p>No questions available.</p>";
-            } else {
-                questions.forEach((q) => {
-                    paperHTML += `
-                <div class="question">
-                    <p>${q.mcqNumber}. ${q.content}</p>
-                    <div class="options">
-                        <label><input type="radio" name="q${q.qid}" value="1"> a) ${q.option1}</label><br>
-                        <label><input type="radio" name="q${q.qid}" value="2"> b) ${q.option2}</label><br>
-                        <label><input type="radio" name="q${q.qid}" value="3"> c) ${q.option3}</label><br>
-                        <label><input type="radio" name="q${q.qid}" value="4"> d) ${q.option4}</label>
-                    </div>
-                </div>
-                <hr>
-            `;
-                });
-            }
-
-            paperDiv.innerHTML = paperHTML;
-
-        } catch (error) {
-            console.error("Error fetching questions:", error);
-        }
-    }
-
-    async function checkAnswers() {
-        let userAnswers = {};
-
-        questionsData.forEach((q) => {
-            let selectedAnswer = document.querySelector(`input[name="q${q.qid}"]:checked`);
-            if (selectedAnswer) {
-                userAnswers[q.qid] = selectedAnswer.value; // Store selected answer
-            }
-        });
-
-        try {
-            const response = await fetch("http://localhost:8080/api/v1/question/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(userAnswers)
+            questionsData = await response.json();
+            questionsData.forEach(q => {
+                answersData[q.qid] = [];  // Initialize answer storage (array for multiple selections)
             });
 
-            const result = await response.json();
-            document.getElementById("result").innerHTML = `You scored ${result.score} out of ${result.total}`;
+            renderQuestions();
+
         } catch (error) {
-            console.error("Error submitting answers:", error);
+            console.error('Error:', error);
+            document.getElementById('examPaper').innerHTML =
+                '<p>Error loading questions. Please refresh the page.</p>';
         }
     }
 
-    fetchQuestions();
+    // Render questions to the page
+    function renderQuestions() {
+        const questionsHTML = questionsData.map(q => `
+        <div class="question">
+            <p><strong>${q.mcqNumber}. ${q.content}</strong></p>
+            <div class="options">
+                ${['option1', 'option2', 'option3', 'option4'].map((opt, i) => `
+                    <label>
+                        <input type="checkbox"
+                            name="question_${q.qid}"
+                            value="${i + 1}"
+                            onchange="saveAnswer(${q.qid}, ${i + 1}, this)"
+                            ${answersData[q.qid].includes(i + 1) ? 'checked' : ''}>
+                        ${String.fromCharCode(97 + i)}) ${q[opt]}
+                    </label><br>
+                `).join('')}
+            </div>
+        </div>
+        <hr>
+    `).join('');
+
+        document.getElementById('examPaper').innerHTML = `
+        <h3>Answer All Questions</h3>
+        ${questionsHTML}
+    `;
+    }
+
+    // Store selected answer
+    function saveAnswer(qid, answer, checkbox) {
+        if (checkbox.checked) {
+            // Add the selected answer
+            answersData[qid].push(answer);
+        } else {
+            // Remove the answer if unchecked
+            answersData[qid] = answersData[qid].filter(ans => ans !== answer);
+        }
+        console.log("Saved Answers:", answersData);
+    }
+
+    async function submitAnswers() {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/question/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(answersData)
+            });
+
+            if (!response.ok) throw new Error('Failed to submit answers');
+
+            const score = await response.json();
+            document.getElementById('result').innerText = `Your Score: ${score}`;
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'Error calculating score. Try again.';
+        }
+    }
 
 
-    // Run when the page loads
-    document.addEventListener("DOMContentLoaded", fetchQuestions);
+
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', loadQuestions);
 </script>
-
 </body>
 </html>

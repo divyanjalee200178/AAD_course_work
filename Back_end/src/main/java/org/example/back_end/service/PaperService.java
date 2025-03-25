@@ -15,4 +15,5 @@ public interface PaperService {
 
     public List<Question> getAllQuestion();
     public List<Map<String, Object>> getQuestion();
+    public int calculateScore(Map<Integer, List<Integer>> userAnswers);
 }
