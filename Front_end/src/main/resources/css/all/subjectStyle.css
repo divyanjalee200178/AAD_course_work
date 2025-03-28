@@ -1,7 +1,7 @@
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-    color: #fff;
+    /*background: linear-gradient(135deg, #1e1e2f, #2a2a40);*/
+    color: #100101;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -9,6 +9,10 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    background-image: url('../../pic/sub1.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #userForm, .tableForm {
@@ -20,6 +24,7 @@ body {
     max-width: 800px;
     width: 100%;
     margin: 10px;
+
 }
 
 .tableForm {
@@ -28,12 +33,13 @@ body {
 
 #userForm {
     width: 50%;
+    margin-top: 100px;
 }
 
 .form-label {
     font-weight: 500;
-    color: #fff;
-    font-size: 14px;
+    color: #6ed930;
+    font-size: 16px;
 }
 
 .form-control {
@@ -168,3 +174,50 @@ body {
         font-size: 13px;
     }
 }
+
+.navbar {
+    background: #1a1a1a !important;
+    box-shadow: 0 2px 15px rgba(80,80,0,0.2);
+    padding: 0.8rem 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    margin-left: -15px;
+}
+
+.navbar-brand {
+    color: #3B82F6 !important;
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: #94a3b8 !important;
+    font-size: 0.95rem;
+    margin: 0 1.2rem !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: #3B82F6 !important;
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: #3B82F6 !important;
+    font-weight: 500;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #3B82F6;
+}
+

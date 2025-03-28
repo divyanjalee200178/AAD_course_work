@@ -18,5 +18,11 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     List<Integer> findAllIdsByRole();
     
 
+//    jwt
+//    User findByEmail(String userName);
+//
+//    boolean existsByEmail(String userName);
+//
+//    int deleteByEmail(String userName);
 
 }

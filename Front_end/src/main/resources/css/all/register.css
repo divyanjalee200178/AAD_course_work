@@ -1,84 +1,422 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+/* ../css/all/register.css */
+:root {
+    --primary-blue: #2563eb;
+    --secondary-green: #10b981;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+}
+
+body {
+    background: #f8fafc;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 15px;
+}
+
+#userForm {
+    background: white;
+    width: 100%;
+    max-width: 500px; /* කුඩා පළල */
+    margin: 0 auto;
+    padding: 30px; /* කුඩා padding */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+}
+
+#userForm h2 {
+    color: var(--text-dark);
+    font-size: 22px; /* කුඩා ෆොන්ට් */
+    font-weight: 600;
     text-align: center;
+    margin-bottom: 30px;
+    position: relative;
 }
 
-form {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 40px);
-    max-width: 400px;
-    box-sizing: border-box;
+#userForm h2::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--secondary-green); /* නව වර්ණය */
 }
 
-h1 {
-    color: #004d99;
-    margin-bottom: 20px;
+.form-label {
+    color: var(--text-light) !important;
+    font-size: 11px !important; /* කුඩා ලේබල් */
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    margin-bottom: 6px !important;
 }
 
-label {
-    display: block;
-    margin-top: 20px;
-    text-align: left;
+.form-control {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 5px !important;
+    padding: 8px 10px !important; /* කුඩා input */
+    font-size: 13px !important;
+    transition: all 0.2s ease !important;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
+.form-control:focus {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
 }
 
-button {
-    background-color: #004d99;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-    margin-top: 20px;
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #1d4ed8 100%) !important;
+    border: none !important;
+    padding: 10px !important; /* කුඩා බොත්තම් */
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 15px !important;
 }
 
-button:hover {
-    background-color: #003366;
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
 }
 
-.account-action {
-    margin-top: 20px;
+/* නව වර්ණ එකතු කිරීම් */
+.col-md-6:hover .form-label {
+    color: var(--primary-blue) !important;
 }
 
-.account-action a {
-    color: #004d99;
-    text-decoration: none;
-    font-weight: bold;
+.terms-text {
+    color: #ef4444;
+    font-size: 11px;
+    margin: 15px 0;
 }
 
-@media (max-width: 768px) {
-    body, html {
-        height: auto;
-        min-height: 100vh;
+.footer-links a {
+    color: var(--secondary-green) !important;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #059669 !important;
+}
+
+/* කුඩා තිර සඳහා */
+@media (max-width: 576px) {
+    #userForm {
         padding: 20px;
     }
 
-    form {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
+    .form-control {
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+    }
+
+    .btn-primary {
+        padding: 8px !important;
     }
 }
+
+:root {
+    --primary-color: #3B82F6;
+    --secondary-color: #10B981;
+    --accent-color: #F59E0B;
+    --text-dark: #1E293B;
+    --text-light: #64748B;
+    --border-color: #000205;
+    --success-color: #22C55E;
+}
+
+body {
+    background: #f8fafc;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+}
+
+#userForm {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e2e8f0;
+}
+
+#userForm h2 {
+    color: var(--primary-color);
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+#userForm h2::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--secondary-color);
+}
+
+.form-label {
+    color: var(--text-light) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    margin-bottom: 6px !important;
+}
+
+.form-control {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 5px !important;
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+    transition: all 0.2s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2563EB 100%) !important;
+    border: none !important;
+    padding: 10px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 15px !important;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+@media (max-width: 576px) {
+    #userForm {
+        padding: 20px;
+    }
+
+    .form-control {
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+    }
+
+    .btn-primary {
+        padding: 8px !important;
+    }
+}
+
+
+
+
+body {
+    background: #121212;
+}
+
+
+.header {
+    color: #94A3B8;
+    text-align: center;
+    padding: 20px;
+}
+
+.footer {
+    color: #64748B;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+.navbar {
+    background: #1a1a1a !important;
+    box-shadow: 0 2px 15px rgba(80,80,0,0.2);
+    padding: 0.8rem 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    margin-left: -15px;
+}
+
+.navbar-brand {
+    color: #3B82F6 !important;
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    color: #94a3b8 !important;
+    font-size: 0.95rem;
+    margin: 0 1.2rem !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: #3B82F6 !important;
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    color: #3B82F6 !important;
+    font-weight: 500;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #3B82F6;
+}
+
+/* Form Container Adjustment */
+body {
+    padding-top: 70px;
+    background: white;
+}
+
+#userForm {
+    margin-top: 40px;
+    background: #1e1e1e;
+    border: 1px solid #2d2d2d;
+}
+#userForm {
+    background: rgba(255, 255, 255, 0.15) !important;     /* වැඩි පාරදෘෂ්යතාව */
+    backdrop-filter: blur(15px) saturate(180%) !important; /* වැඩි බ්ලර් සහ saturation */
+    border: 2px solid rgba(255, 255, 255, 0.4) !important; /* පැහැදිලි රේඛාව */
+    box-shadow:
+            0 8px 32px rgba(255, 255, 255, 0.2),             /* ප්රබල සෙවනැල්ල */
+            inset 0 0 12px rgba(255, 255, 255, 0.1);         /* අභ්යන්තර glow බලපෑම */
+    padding: 40px !important;
+    border-radius: 20px !important;
+    color: #ffffff !important;                           /* සුදු අකුරු */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Complete Glass Effect with Black Text */
+#userForm {
+    background: rgba(55, 255, 255, 0.2) !important;
+    backdrop-filter: blur(20px) saturate(200%) brightness(1.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow:
+            0 12px 40px rgba(0, 0, 0, 0.15),
+            inset 0 0 20px rgba(255, 255, 255, 0.2) !important;
+    padding: 40px !important;
+    border-radius: 24px !important;
+    color: #000000 !important; /* කළු අකුරු */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Glass Texture Overlay */
+#userForm::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+            linear-gradient(
+                    45deg,
+                    rgba(255, 255, 255, 0.05) 25%,
+                    rgba(255, 255, 255, 0.15) 50%,
+                    rgba(255, 255, 255, 0.05) 75%
+            );
+    animation: glassShine 8s infinite linear;
+    z-index: -1;
+}
+
+@keyframes glassShine {
+    from { transform: translate(0, 0); }
+    to { transform: translate(100%, 100%); }
+}
+
+/* Text Elements Styling */
+#userForm h2 {
+    color: #000000 !important;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.form-label {
+    color: #2d3748 !important; /* අඳුරු අළු */
+    font-weight: 600 !important;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    color: #000000 !important;
+    font-weight: 500;
+}
+
+.form-control::placeholder {
+    color: #4a5568 !important; /* මධ්යම අළු */
+}
+
+.btn-primary {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    color: #000000 !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #userForm {
+        padding: 30px !important;
+        margin: 15px !important;
+        border-radius: 16px !important;
+    }
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* බොත්තම් සඳහා glass effect */
+.btn-primary {
+    background: rgb(154, 232, 59) !important;
+    border: 2px solid rgb(210, 183, 45) !important;
+    color: #020009 !important;
+    backdrop-filter: blur(5px);
+}
+
+.btn-primary:hover {
+    background: rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Body පසුබිම සඳහා gradient */
+body {
+    background-image: url('../../pic/regi8.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+

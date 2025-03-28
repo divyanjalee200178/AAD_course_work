@@ -9,4 +9,8 @@ public interface UserService {
     public boolean deleteUser(int u_id);
     public List<UserDTO> updateUsers(int u_id, UserDTO userDTO);
     public List<UserDTO> getAllUsers();
+
+    //jwt
+//    int saveUser(UserDTO userDTO);
+//    UserDTO searchUser(String username);
 }
