@@ -7,10 +7,11 @@ import java.util.List;
 public interface UserService {
     public boolean addUser(UserDTO userDTO);
     public boolean deleteUser(int u_id);
-    public List<UserDTO> updateUsers(int u_id, UserDTO userDTO);
+//    public List<UserDTO> updateUsers(int u_id, UserDTO userDTO);
+    public boolean updateUsers(int u_id, UserDTO userDTO);
     public List<UserDTO> getAllUsers();
 
     //jwt
-//    int saveUser(UserDTO userDTO);
-//    UserDTO searchUser(String username);
+    boolean saveUser(UserDTO userDTO);
+    UserDTO searchUser(String username);
 }

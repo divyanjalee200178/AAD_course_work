@@ -44,6 +44,14 @@ public class SubjectServiceImpl implements SubjectService {
         return true;
     }
 
+    public SubjectDTO getSubjectById(int id) {
+        Subject subject = subjectRepo.findById(id).orElse(null);  // Use .orElse(null) to avoid NoSuchElementException if not found
+        if (subject == null) {
+            return null;  // If not found, return null
+        }
+        return modelMapper.map(subject, SubjectDTO.class);  // Map to SubjectDTO
+    }
+
 
     public int getNextSubjectId() {
         List<Integer> allIds = subjectRepo.findAllIds();
@@ -76,17 +84,41 @@ public class SubjectServiceImpl implements SubjectService {
         }).collect(Collectors.toList());
     }
 
-
-
-    public List<SubjectDTO> updateSubject(int id, SubjectDTO subjectDTO) {
-        Subject subject = subjectRepo.findById(id).get();
-        subject.setName(subjectDTO.getName());
-        subject.setSt_count(subjectDTO.getSt_count());
-        subject.setDate(subjectDTO.getDate());
-        subject.setTime(subjectDTO.getTime());
-        subjectRepo.save(subject);
-        return getAllSubjects();
+    @Override
+    public boolean updateSubject(int id, SubjectDTO subjectDTO) {
+        return false;
     }
+
+
+//    public List<SubjectDTO> updateSubject(int id, SubjectDTO subjectDTO) {
+//        Subject subject = subjectRepo.findById(id).get();
+//        subject.setName(subjectDTO.getName());
+//        subject.setSt_count(subjectDTO.getSt_count());
+//        subject.setDate(subjectDTO.getDate());
+//        subject.setTime(subjectDTO.getTime());
+//        subjectRepo.save(subject);
+//        return getAllSubjects();
+//    }
+
+//    public boolean updateSubject(int id, SubjectDTO subjectDTO) {
+//        Subject subject = subjectRepo.findById(id).orElseThrow(() -> new RuntimeException("Subject not found"));
+//        subject.setName(subjectDTO.getName());
+//        subject.setSt_count(subjectDTO.getSt_count());
+//        subject.setDate(subjectDTO.getDate());
+//        subject.setTime(subjectDTO.getTime());
+//        subjectRepo.save(subject); // Save the updated subject to the database
+//        return true;  // Return true to indicate that the update was successful
+//    }
+
+    public boolean updateSubject(SubjectDTO subjectDTO) {
+        if (subjectRepo.findById(subjectDTO.getId())==null){
+            throw new RuntimeException("no subject found");
+        }
+
+        subjectRepo.save(modelMapper.map(subjectDTO, Subject.class));
+        return true;  // Return true to indicate that the update was successful
+    }
+
 
     public boolean deleteSubject(int id) {
         if (subjectRepo.existsById(id)) {

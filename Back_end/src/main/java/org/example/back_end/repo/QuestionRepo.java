@@ -19,4 +19,8 @@ public interface QuestionRepo extends JpaRepository<Question, Long> {
     @Query("SELECT q.answer FROM Question q WHERE q.qid = :qid")
     List<Integer> findCorrectAnswersByQid(@Param("qid") int qid);
 
+    //****************************************
+    @Query("SELECT COUNT(q) FROM Question q WHERE q.exam.id = :examId")
+    int countQuestionsByExamId(@Param("examId") int examId);
+
 }

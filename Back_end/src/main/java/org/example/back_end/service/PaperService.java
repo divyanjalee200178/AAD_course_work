@@ -16,5 +16,10 @@ public interface PaperService {
     public List<Question> getAllQuestion();
     public List<Map<String, Object>> getQuestion();
     public int calculateScore(Map<Integer, List<Integer>> userAnswers);
+
     public int getTotalQuestions();
+
+    //********************************************
+    public int calculateScores(Map<Integer, List<Integer>> userAnswers, int examId);
+    public int getTotalQuestionsForExam(int examId);
 }

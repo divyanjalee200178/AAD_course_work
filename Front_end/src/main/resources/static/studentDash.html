@@ -11,6 +11,69 @@
         <link rel="stylesheet" href="../css/adminDashboard.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
+    <style>
+        /* Styling for the card container */
+        #examCardsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem; /* Adjust the space between cards */
+            justify-content: center;
+        }
+
+        /* Styling for each card */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px; /* Limit the max width of each card */
+            margin: 10px 0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background-color: #ccd9e5; /* Light background for card */
+            color: #0c0c0c; /* Dark text color for readability */
+        }
+
+        /* Hover effect on card */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #e2e6ea; /* Slightly darker background on hover */
+        }
+
+        /* Styling for card body */
+        .card-body {
+            padding: 15px;
+            text-align: left;
+        }
+
+        /* Card Title */
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #007bff; /* Blue color for title */
+        }
+
+        /* Card Text */
+        .card-text {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Custom colors for labels */
+        .card-text strong {
+            color: #28a745; /* Green for label */
+        }
+
+        /* Styling for smaller devices */
+        @media (max-width: 767px) {
+            .card {
+                max-width: 100%; /* Cards will take the full width on small screens */
+            }
+        }
+
+
+    </style>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
@@ -52,6 +115,8 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 User Manage
                             </a>
+
+
                             <div class="sb-sidenav-menu-heading">Interface</div>
 <!--                            **********************************************************************************-->
 <!--                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">-->
@@ -75,10 +140,10 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="../templates/user.html">User Manage</a>
-                                    <a class="nav-link" href="../templates/subject.html">Subject Manage</a>
-                                    <a class="nav-link" href="../templates/exam.html">Exam Manage</a>
-                                    <a class="nav-link" href="../templates/result.html">Result Manage</a>
+<!--                                    <a class="nav-link" href="../templates/user.html">User Manage</a>-->
+                                    <a class="nav-link" href="../templates/paper2.html..............................">Paper</a>
+                                    <a class="nav-link" href="../templates/paper.html">All ready paper</a>
+                                    <a class="nav-link" href="../templates/viewResul.html">Result</a>
                                     <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
@@ -139,9 +204,9 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-
-                <div class="col-md-12 mt-4" id="examCardsContainer">
-                    <!-- Exam cards will be dynamically added here -->
+                <!-- Exam Cards Section -->
+                <div class="row mt-4" id="examCardsContainer">
+                    <!-- Cards will be appended here by JavaScript -->
                 </div>
 
                 <footer class="py-4 bg-light mt-auto">
@@ -165,5 +230,68 @@
         <script src="../demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="../js/option/datatables-simple-demo.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            viewExams();
+            loadChart();
+        });
+        function viewExams() {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/exam/get", // Replace with your actual API endpoint
+                method: "GET",
+                success: function(response) {
+                    console.log("API response:", response);
+                    let cardsContainer = $("#examCardsContainer");
+                    cardsContainer.empty();
+                    if (response && Array.isArray(response)) {
+                        response.forEach(exam => {
+                            console.log("Exam data:", exam);
+                            // Create and append a card for each exam
+                            cardsContainer.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Exam ID: ${exam.id}</h5>
+                                            <p class="card-text"><strong>Duration:</strong> ${exam.duration}</p>
+                                            <p class="card-text"><strong>Description:</strong> ${exam.description}</p>
+                                            <p class="card-text"><strong>Start Date:</strong> ${exam.startDate}</p>
+                                            <p class="card-text"><strong>End Date:</strong> ${exam.endDate}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    } else {
+                        alert("No exams found.");
+                    }
+                },
+                error: function() {
+                    alert("Error fetching exams!");
+                }
+            });
+        }
+
+        // Function to load the Chart.js chart
+        function loadChart() {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',  // or 'line', 'pie', etc.
+                data: {
+                    labels: ['January', 'February', 'March'],
+                    datasets: [{
+                        label: 'My Dataset',
+                        data: [12, 19, 3]
+                    }]
+                }
+            });
+        }
+
+    </script>
     </body>
 </html>

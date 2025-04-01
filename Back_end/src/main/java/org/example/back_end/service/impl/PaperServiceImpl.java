@@ -98,4 +98,30 @@ public class PaperServiceImpl implements PaperService {
         return score;
     }
 
+    //*********************************************************
+    @Override
+    public int calculateScores(Map<Integer, List<Integer>> userAnswers, int examId) {
+        int score = 0;
+
+        for (Map.Entry<Integer, List<Integer>> entry : userAnswers.entrySet()) {
+            int qid = entry.getKey();
+            List<Integer> selectedAnswers = entry.getValue();
+
+            // Retrieve correct answers from the database
+            List<Integer> correctAnswers = questionRepository.findCorrectAnswersByQid(qid);
+
+            // Check if selected answers match the correct ones
+            if (selectedAnswers.containsAll(correctAnswers) && correctAnswers.containsAll(selectedAnswers)) {
+                score++; // Increment score for correct answers
+            }
+        }
+
+        return score;
+    }
+
+
+    public int getTotalQuestionsForExam(int examId) {
+        return questionRepository.countQuestionsByExamId(examId);
+    }
+
 }

@@ -57,6 +57,7 @@
 <select id="userId" class="form-control mb-2" required>
     <option value="" disabled selected>Select User</option> <!-- Placeholder -->
 </select>
+
 <div class="header">
     <h1>Exam Paper</h1>
 </div>
@@ -70,8 +71,6 @@
 
 <script>
 
-
-
     let questionsData = []; // Store questions
     let answersData = {}; // Store selected answers
 
@@ -80,57 +79,70 @@
         return localStorage.getItem("token");  // Retrieve JWT token from localStorage
     }
 
-    // Fetch questions from API
-    async function loadQuestions() {
+    async function loadQuestionsForExam(examId) {
         try {
             const token = getJWTToken();
             const response = await fetch('http://localhost:8080/api/v1/question/get', {
+                method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token  // Add JWT token to the headers
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
                 }
             });
 
             if (!response.ok) throw new Error('Failed to load questions');
 
-            questionsData = await response.json();
+            let allQuestions = await response.json();
+
+            // 🔹 Filter questions for the selected examId
+            questionsData = allQuestions.filter(q => q.examId === parseInt(examId));
+
+            if (questionsData.length === 0) {
+                document.getElementById('examPaper').innerHTML = '<p>No questions found for this exam.</p>';
+                return;
+            }
+
+            answersData = {};
             questionsData.forEach(q => {
-                answersData[q.qid] = [];  // Initialize answer storage (array for multiple selections)
+                answersData[q.qid] = [];
             });
 
             renderQuestions();
 
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('examPaper').innerHTML =
-                '<p>Error loading questions. Please refresh the page.</p>';
+            document.getElementById('examPaper').innerHTML = '<p>Error loading questions. Please refresh the page.</p>';
         }
     }
+
+
+
 
     // Render questions to the page
     function renderQuestions() {
         const questionsHTML = questionsData.map(q => `
-    <div class="question">
-        <p><strong>${q.mcqNumber}. ${q.content}</strong></p>
-        <div class="options">
-            ${['option1', 'option2', 'option3', 'option4'].map((opt, i) => `
-                <label>
-                    <input type="checkbox"
-                        name="question_${q.qid}"
-                        value="${i + 1}"
-                        onchange="saveAnswer(${q.qid}, ${i + 1}, this)"
-                        ${answersData[q.qid].includes(i + 1) ? 'checked' : ''}>
-                    ${String.fromCharCode(97 + i)}) ${q[opt]}
-                </label><br>
-            `).join('')}
+        <div class="question">
+            <p><strong>${q.mcqNumber}. ${q.content}</strong></p>
+            <div class="options">
+                ${['option1', 'option2', 'option3', 'option4'].map((opt, i) => `
+                    <label>
+                        <input type="checkbox"
+                            name="question_${q.qid}"
+                            value="${i + 1}"
+                            onchange="saveAnswer(${q.qid}, ${i + 1}, this)"
+                            ${answersData[q.qid].includes(i + 1) ? 'checked' : ''}>
+                        ${String.fromCharCode(97 + i)}) ${q[opt]}
+                    </label><br>
+                `).join('')}
+            </div>
         </div>
-    </div>
-    <hr>
-`).join('');
+        <hr>
+    `).join('');
 
         document.getElementById('examPaper').innerHTML = `
-    <h3>Answer All Questions</h3>
-    ${questionsHTML}
-`;
+        <h3>Answer All Questions</h3>
+        ${questionsHTML}
+    `;
     }
 
     // Store selected answer
@@ -148,12 +160,13 @@
     // Submit answers to the server
     async function submitAnswers() {
         try {
+            const examId = document.getElementById('examId').value; // Get the selected exam ID
             const token = getJWTToken();
-            const response = await fetch('http://localhost:8080/api/v1/question/submit', {
+            const response = await fetch('http://localhost:8080/api/v1/question/submit1?examId=' + examId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token  // Add JWT token to the headers
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(answersData)
             });
@@ -161,22 +174,23 @@
             if (!response.ok) throw new Error('Failed to submit answers');
 
             const result = await response.json();
-            const score = result.score; // Get the score from the response
-            const totalQuestions = result.totalQuestions; // Get the total number of questions
-            const percentage = result.percentage; // Get the percentage from the response
-            const grade = result.grade; // Get the grade from the response
+            const score = result.score;
+            const totalQuestions = result.totalQuestions;
+            const percentage = result.percentage;
+            const grade = result.grade;
 
             // Display score, percentage, and grade
             document.getElementById('result').innerHTML = `
-        <p>Your Score: ${score} out of ${totalQuestions}</p>
-        <p>Percentage: ${percentage.toFixed(2)}%</p>
-        <p>Grade: ${grade}</p>
-    `;
+            <p>Your Score: ${score} out of ${totalQuestions}</p>
+            <p>Percentage: ${percentage.toFixed(2)}%</p>
+            <p>Grade: ${grade}</p>
+        `;
         } catch (error) {
             console.error('Error:', error);
             document.getElementById('result').innerText = 'Error calculating score. Try again.';
         }
     }
+
 
     // Load exam IDs
     async function loadExams() {
@@ -276,12 +290,16 @@
     window.addEventListener('DOMContentLoaded', () => {
         loadExams();
         loadUsers();
-        loadQuestions();
     });
 
+    // Load questions for selected exam
+    document.getElementById('examId').addEventListener('change', (event) => {
+        const examId = event.target.value;
+        if (examId) {
+            loadQuestionsForExam(examId);
+        }
+    });
 
-    // Initialize when page loads
-    window.addEventListener('DOMContentLoaded', loadQuestions);
 </script>
 </body>
 </html>

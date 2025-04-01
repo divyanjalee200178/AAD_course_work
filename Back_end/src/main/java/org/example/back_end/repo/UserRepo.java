@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
-    boolean existsByEmail(String email);
+//    boolean existsByEmail(String email);
     @Query("SELECT u.u_id FROM User u")
     List<Integer> findAllIds();
 
@@ -19,10 +19,10 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     
 
 //    jwt
-//    User findByEmail(String userName);
-//
-//    boolean existsByEmail(String userName);
-//
-//    int deleteByEmail(String userName);
+    User findByEmail(String userName);
+
+    boolean existsByEmail(String userName);
+
+    int deleteByEmail(String userName);
 
 }

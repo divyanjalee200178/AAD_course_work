@@ -8,12 +8,14 @@ import org.example.back_end.entity.User;
 import org.example.back_end.repo.ExamRepo;
 import org.example.back_end.repo.UserRepo;
 import org.example.back_end.service.QuestionService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -29,6 +31,8 @@ public class QuestionController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping("/post")
     public ResponseEntity<?> addQuestion(@RequestBody QuestionDTO questionDTO) {
@@ -94,4 +98,21 @@ public class QuestionController {
     public void deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
     }
+
+    //***********************************************
+    @GetMapping("/getByExam/{id}")
+    public ResponseEntity<List<QuestionDTO>> getQuestionsByExam(@PathVariable Long id) {
+        try {
+            List<Question> questions = questionService.getQuestionsByExams(id);
+            List<QuestionDTO> questionDTOs = questions.stream()
+                    .map(q -> modelMapper.map(q, QuestionDTO.class))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(questionDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);  // Return 500 if there's an error
+        }
+    }
+
+
+
 }

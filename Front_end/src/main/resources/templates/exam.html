@@ -64,8 +64,25 @@
 
     $(document).ready(function () {
         loadNextExamId();
-
+        setupRowClickListener();
     });
+
+    function getToken() {
+        return localStorage.getItem("jwtToken"); // Retrieve JWT from local storage
+    }
+
+    function setupRowClickListener() {
+        $(document).on("click", "#examTableBody tr", function () {
+            let selectedRow = $(this).children("td"); // Get all table cells from the clicked row
+
+            // Assign values from the clicked row to input fields
+            $('#exam_id').val(selectedRow.eq(0).text());
+            $('#duration').val(selectedRow.eq(1).text());
+            $('#description').val(selectedRow.eq(2).text());
+            $('#startDate').val(selectedRow.eq(3).text());
+            $('#endDate').val(selectedRow.eq(4).text());
+        });
+    }
 
     function saveExam() {
         const exam = {
@@ -79,14 +96,16 @@
             url: "http://localhost:8080/api/v1/exam/create",
             method: "POST",
             contentType: "application/json",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
             data: JSON.stringify(exam),
             success: function(response) {
                 alert("Exam created successfully!");
-                // viewExams();
                 loadNextExamId();
             },
-            error: function() {
-                alert("Error creating exam!");
+            error: function(xhr) {
+                alert("Error creating exam! " + xhr.responseText);
             }
         });
     }
@@ -95,11 +114,14 @@
         $.ajax({
             url: "http://localhost:8080/api/v1/exam/next-id",
             method: "GET",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
             success: function(response) {
                 $('#exam_id').val(response);
             },
-            error: function() {
-                alert("Error loading exam ID!");
+            error: function(xhr) {
+                alert("Error loading exam ID! " + xhr.responseText);
             }
         });
     }
@@ -108,6 +130,9 @@
         $.ajax({
             url: "http://localhost:8080/api/v1/exam/get",
             method: "GET",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
             success: function(response) {
                 console.log("API response:", response);
                 let tableBody = $("#examTableBody");
@@ -116,25 +141,24 @@
                     response.forEach(exam => {
                         console.log("Exam data:", exam);
                         tableBody.append(`
-                        <tr>
-                            <td>${exam.id}</td>
-                            <td>${exam.duration}</td>
-                            <td>${exam.description}</td>
-                            <td>${exam.startDate}</td>
-                            <td>${exam.endDate}</td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td>${exam.id}</td>
+                        <td>${exam.duration}</td>
+                        <td>${exam.description}</td>
+                        <td>${exam.startDate}</td>
+                        <td>${exam.endDate}</td>
+                    </tr>
+                `);
                     });
                 } else {
                     alert("No exams found.");
                 }
             },
-            error: function() {
-                alert("Error fetching exams!");
+            error: function(xhr) {
+                alert("Error fetching exams! " + xhr.responseText);
             }
         });
     }
-
 
     function updateExam() {
         const examId = $('#exam_id').val();
@@ -149,13 +173,16 @@
             url: "http://localhost:8080/api/v1/exam/update/" + examId,
             method: "PUT",
             contentType: "application/json",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
             data: JSON.stringify(exam),
             success: function(response) {
                 alert("Exam updated successfully!");
                 viewExams();
             },
-            error: function() {
-                alert("Error updating exam!");
+            error: function(xhr) {
+                alert("Error updating exam! " + xhr.responseText);
             }
         });
     }
@@ -166,15 +193,48 @@
         $.ajax({
             url: "http://localhost:8080/api/v1/exam/delete/" + examId,
             method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
             success: function(response) {
                 alert("Exam deleted successfully!");
                 viewExams();
             },
-            error: function() {
-                alert("Error deleting exam!");
+            error: function(xhr) {
+                alert("Error deleting exam! " + xhr.responseText);
             }
         });
     }
+
+    // Function to handle user login and store the JWT token
+    function login() {
+        const credentials = {
+            username: $('#username').val(),
+            password: $('#password').val()
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/auth/login",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(credentials),
+            success: function(response) {
+                localStorage.setItem("jwtToken", response.token); // Store JWT token
+                alert("Login successful!");
+            },
+            error: function(xhr) {
+                alert("Login failed! " + xhr.responseText);
+            }
+        });
+    }
+
+    // Logout function to clear JWT token
+    function logout() {
+        localStorage.removeItem("jwtToken");
+        alert("Logged out!");
+    }
+
+
 </script>
 
 </body>

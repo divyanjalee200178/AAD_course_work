@@ -18,7 +18,11 @@ public interface QuestionService {
     List<Question> findByName(String name);
 
     public List<QuestionDTO> getAllQuestions();
+//******************************************
+
 
     public List<Question> getAllQuestion();
-    public List<Question> getQuestionsByExam(Long examId);
+//    public List<Question> getQuestionsByExam(Long examId);
+
+    public List<Question> getQuestionsByExams(Long examId);
 }

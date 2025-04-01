@@ -1,14 +1,28 @@
 $(document).ready(function () {
     loadStudentIds();
-    // loadExamIds();
-
+    loadExamIds();
     loadNextResultId();
 });
 
+// Fetch the JWT token from localStorage
+function getToken() {
+    return localStorage.getItem("token");
+}
+
 function loadNextResultId() {
+    let token = getToken();  // Fetch the token
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
+
     $.ajax({
         url: "http://localhost:8080/api/v1/results/next-id",
         type: "GET",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         success: function (nextId) {
             $("#result_id").val(nextId);
         },
@@ -19,11 +33,20 @@ function loadNextResultId() {
     });
 }
 
-
 function loadStudentIds() {
+    let token = getToken();  // Fetch the token
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
+
     $.ajax({
         url: "http://localhost:8080/api/v1/user/get",
         type: "GET",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         success: function (users) {
             let studentSelect = $("#student_id");
             studentSelect.empty();
@@ -43,20 +66,30 @@ function loadStudentIds() {
 }
 
 function loadExamIds() {
+    let token = getToken();  // Fetch the token
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
+
     $.ajax({
-        url: "http://localhost:8080/api/v1/exam/getAllExams",
+        url: "http://localhost:8080/api/v1/exam/getAllExamIds",
         type: "GET",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         success: function (exams) {
-            console.log(exams);
+            console.log(exams);  // Log the response to inspect it
             let examSelect = $("#exam_id");
             examSelect.empty();
             examSelect.append('<option value="">Select Exam</option>');
 
-            exams.forEach(exam => {
-                examSelect.append(`<option value="${exam.id}">${exam.id}</option>`);
+            // Loop through the array of exam IDs (numbers)
+            exams.forEach(examId => {
+                examSelect.append(`<option value="${examId}">${examId}</option>`);
             });
         },
-
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("Error Status:", textStatus);
             console.log("Error Thrown:", errorThrown);
@@ -68,6 +101,13 @@ function loadExamIds() {
 
 
 function saveResult() {
+    let token = getToken();  // Fetch the token
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
+
     let resultData = {
         msg: $("#msg").val(),
         totalMark: $("#total_mark").val(),
@@ -79,6 +119,9 @@ function saveResult() {
         url: "http://localhost:8080/api/v1/results/save",
         type: "POST",
         contentType: "application/json",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         data: JSON.stringify(resultData),
         success: function () {
             alert("Result saved successfully!");
@@ -93,23 +136,39 @@ function saveResult() {
 }
 
 function viewResults() {
+    let token = getToken();  // Fetch the token
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
+
     $.ajax({
         url: "http://localhost:8080/api/v1/results/get",
         type: "GET",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         success: function (results) {
             let tableBody = $("#resultTableBody");
             tableBody.empty();
 
             results.forEach(result => {
+                // Log the individual result object to check its structure
+                console.log(result);
+
+                const examId = result.examId ? result.examId : 'N/A';  // Use 'N/A' if examId is missing
+                const studentId = result.studentId ? result.studentId : 'N/A';  // Use 'N/A' if studentId is missing
+
                 tableBody.append(`
-                        <tr>
-                            <td>${result.id}</td>
-                            <td>${result.exam.id}</td>
-                            <td>${result.student.id}</td>
-                            <td>${result.msg}</td>
-                            <td>${result.totalMark}</td>
-                        </tr>
-                    `);
+                    <tr>
+                        <td>${result.id}</td>
+                        <td>${examId}</td>
+                        <td>${studentId}</td>
+                        <td>${result.msg}</td>
+                        <td>${result.totalMark}</td>
+                    </tr>
+                `);
             });
         },
         error: function (error) {
@@ -120,7 +179,13 @@ function viewResults() {
 }
 
 function deleteResult() {
+    let token = getToken();  // Fetch the token
     let resultId = $("#result_id").val();
+
+    if (!token) {
+        alert("You need to log in!");
+        return;
+    }
 
     if (resultId === "") {
         alert("Please provide a Result ID to delete.");
@@ -130,6 +195,9 @@ function deleteResult() {
     $.ajax({
         url: `http://localhost:8080/api/v1/results/delete/${resultId}`,
         type: "DELETE",
+        headers: {
+            "Authorization": "Bearer " + token  // Add JWT token to the header
+        },
         success: function () {
             alert("Result deleted successfully!");
             viewResults();

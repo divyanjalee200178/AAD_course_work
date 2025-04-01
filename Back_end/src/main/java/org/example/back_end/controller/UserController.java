@@ -1,15 +1,22 @@
 package org.example.back_end.controller;
 
+import jakarta.validation.Valid;
+import org.example.back_end.dto.AuthDTO;
+import org.example.back_end.dto.ResponseDTO;
 import org.example.back_end.dto.UserDTO;
 import org.example.back_end.service.UserService;
 import org.example.back_end.service.impl.UserServiceImpl;
+import org.example.back_end.util.JwtUtil;
 import org.example.back_end.util.ResponseUtil;
+import org.example.back_end.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {
@@ -19,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userServices;
 
-//    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     @PostMapping("save")
     public ResponseUtil saveUser(@RequestBody UserDTO userDTO) {
         try {
@@ -65,9 +72,22 @@ public class UserController {
         return userDTOS;
     }
 
+
     @PutMapping("update/{u_id}")
-    public List<UserDTO> updateUsers(@PathVariable int u_id, @RequestBody UserDTO userDTO){
-       return userService.updateUsers(u_id, userDTO);
+    public ResponseEntity<ResponseUtil> updateUser(@PathVariable int u_id, @RequestBody UserDTO userDTO) {
+
+        try {
+            boolean updated = userService.updateUsers(u_id, userDTO); // Ensure correct method name
+            if (updated) {
+                return ResponseEntity.ok(new ResponseUtil(200, "User updated successfully", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseUtil(404, "User not found", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseUtil(500, "Error updating user: " + e.getMessage(), null));
+        }
     }
 
     @DeleteMapping("delete/{u_id}")
@@ -76,35 +96,21 @@ public class UserController {
     }
 
     //jwt
-//    public UserController(UserService userServices, JwtUtil jwtUtil) {
-//        this.userServices = userServices;
-//        this.jwtUtil = jwtUtil;
-//    }
-//    @PostMapping(value = "/register")
-//    public ResponseEntity<ResponseDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {
-//        try {
-//            int res = userService.saveUser(userDTO);
-//            switch (res) {
-//                case VarList.Created -> {
-//                    String token = jwtUtil.generateToken(userDTO);
-//                    AuthDTO authDTO = new AuthDTO();
-//                    authDTO.setEmail(userDTO.getEmail());
-//                    authDTO.setToken(token);
-//                    return ResponseEntity.status(HttpStatus.CREATED)
-//                            .body(new ResponseDTO(VarList.Created, "Success", authDTO));
-//                }
-//                case VarList.Not_Acceptable -> {
-//                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-//                            .body(new ResponseDTO(VarList.Not_Acceptable, "Email Already Used", null));
-//                }
-//                default -> {
-//                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-//                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
-//                }
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
-//        }
-//    }
+    public UserController(UserService userServices, JwtUtil jwtUtil) {
+        this.userServices = userServices;
+        this.jwtUtil = jwtUtil;
+    }
+    @PostMapping("/register")
+    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
+        boolean saved = userService.saveUser(userDTO);
+        if (saved) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Registration successful!", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ResponseDTO(VarList.Conflict, "User ID already exists!", null));
+        }
+    }
+
+
 }

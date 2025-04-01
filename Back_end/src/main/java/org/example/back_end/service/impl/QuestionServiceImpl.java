@@ -113,4 +113,17 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepo.findByExamId(examId);
     }
 
+
+
+    //****************************
+    @Override
+    public List<Question> getQuestionsByExams(Long examId) {
+        List<Question> questions = questionRepo.findByExamId(examId);
+        if (questions.isEmpty()) {
+            throw new IllegalArgumentException("No questions found for the given exam.");
+        }
+        return questions;
+    }
+
+
 }

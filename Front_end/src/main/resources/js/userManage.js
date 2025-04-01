@@ -43,24 +43,44 @@ function saveData() {
         }
     });
 }
-
 function loadNextId() {
-    $.ajax({
-        url: "http://localhost:8080/api/v1/user/next-id",
-        type: "GET",
-        success: function (nextId) {
-            $('#u_id').val(nextId);
-        },
-        error: function () {
-            alert("Error fetching next ID.");
+    let token = localStorage.getItem("token");
+
+    if (!token) {
+        alert("Not authenticated!");
+        return;
+    }
+
+    fetch("http://localhost:8080/api/v1/user/next-id", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
         }
-    });
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Unauthorized access!");
+            return response.text();
+        })
+        .then(nextId => {
+            // Change from id to u_id to match your HTML field's ID
+            const uIdInput = document.getElementById("u_id");
+            if (uIdInput) {
+                uIdInput.value = nextId; // Set the next ID value
+            } else {
+                console.error("Element with id 'u_id' not found.");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching next ID:", error);
+            alert("Authentication required!");
+        });
 }
 
+
 function updateData() {
-    let u_id = $("#u_id").val();
-    let user = {
-        u_id: u_id,
+    let userId = $("#u_id").val();
+    let userData = {
         name: $("#name").val(),
         contact: $("#contact").val(),
         address: $("#address").val(),
@@ -69,25 +89,26 @@ function updateData() {
         password: $("#password").val()
     };
 
-    console.log("Updating user:", user); // Log user data
-
     $.ajax({
-        url: `http://localhost:8080/api/v1/user/update/${u_id}`,
-        type: "PUT",
+        url: `http://localhost:8080/api/v1/user/update/${u_id}`,  // Check if correct ID is passed
+        method: "PUT",
         contentType: "application/json",
-        data: JSON.stringify(user),
-        success: function () {
+        data: JSON.stringify(userData),
+        success: function (response) {
             alert("User updated successfully!");
-            loadAllUsers();
         },
-        error: function () {
-            alert("Error updating User.");
+        error: function (xhr, status, error) {
+            console.error("Update failed:", xhr.responseText);
+            alert("Error updating user: " + xhr.responseText);
         }
     });
 }
 
 
 function loadAllUsers() {
+
+
+    //***************
     $.ajax({
         url: "http://localhost:8080/api/v1/user/get",
         type: "GET",
