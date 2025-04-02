@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper</title>
+    <title>Paper2_1</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -120,9 +120,9 @@
 
 
     function renderQuestions() {
-        const questionsHTML = questionsData.map((q, index) => `
+        const questionsHTML = questionsData.map(q => `
         <div class="question">
-            <p><strong>${index + 1}. ${q.content}</strong></p> <!-- Dynamically set question number -->
+            <p><strong>${q.mcqNumber}. ${q.content}</strong></p>
             <div class="options">
                 ${['option1', 'option2', 'option3', 'option4'].map((opt, i) => `
                     <label>
@@ -144,7 +144,6 @@
         ${questionsHTML}
     `;
     }
-
 
     // Store selected answer
     function saveAnswer(qid, answer, checkbox) {

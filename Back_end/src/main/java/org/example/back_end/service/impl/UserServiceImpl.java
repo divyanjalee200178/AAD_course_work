@@ -1,6 +1,8 @@
 package org.example.back_end.service.impl;
 
+import org.example.back_end.dto.SubjectDTO;
 import org.example.back_end.dto.UserDTO;
+import org.example.back_end.entity.Subject;
 import org.example.back_end.entity.User;
 import org.example.back_end.repo.UserRepo;
 import org.example.back_end.service.UserService;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -35,6 +38,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if (userRepo.existsById(userDTO.getU_id())) {
             return false;
         }
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         User user = modelMapper.map(userDTO, User.class);
         userRepo.save(user);
@@ -78,24 +84,33 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return modelMapper.map(userRepo.findAll(),new TypeToken<List<UserDTO>>() {}.getType());
     }
 
-    public boolean updateUsers(int u_id, UserDTO userDTO) {
-        User existingUser = userRepo.findById(u_id).orElse(null);
-
-        if (existingUser == null) {
-            return false; // User not found
+    public boolean updateUsers(UserDTO userDTO) {
+        if (userDTO.getU_id() == 0) {
+            throw new RuntimeException("Invalid User ID: " + userDTO.getU_id());
         }
 
-        // Update user details
-        existingUser.setName(userDTO.getName());
-        existingUser.setContact(userDTO.getContact());
-        existingUser.setAddress(userDTO.getAddress());
-        existingUser.setEmail(userDTO.getEmail());
-        existingUser.setRole(userDTO.getRole());
-        existingUser.setPassword(userDTO.getPassword());
+        Optional<User> existingUser = userRepo.findById(userDTO.getU_id());
+        if (!existingUser.isPresent()) {
+            throw new RuntimeException("No user found with ID: " + userDTO.getU_id());
+        }
 
-        userRepo.save(existingUser);
-        return true; // Update successful
+        User user = existingUser.get();
+        user.setName(userDTO.getName());
+        user.setContact(userDTO.getContact());
+        user.setAddress(userDTO.getAddress());
+        user.setEmail(userDTO.getEmail());
+        user.setRole(userDTO.getRole());
+
+        // Encrypt password before setting it on the user entity
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
+        userRepo.save(user);
+        return true;
     }
+
 
     public boolean deleteUser(int u_id) {
         if (userRepo.existsById(u_id)){

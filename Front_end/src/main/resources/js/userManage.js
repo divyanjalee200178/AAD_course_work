@@ -37,6 +37,7 @@ function saveData() {
             alert("Customer saved successfully!");
             $("#userForm")[0].reset();
             loadNextId();
+            loadAllUsers();
         },
         error: function (xhr) {
             alert("Error: " + xhr.responseText);
@@ -79,23 +80,47 @@ function loadNextId() {
 
 
 function updateData() {
-    let userId = $("#u_id").val();
+    let userId = $("#u_id").val().trim();  // Get user ID from input and trim spaces
+
+    console.log("Retrieved user ID:", userId);  // Debugging log
+
+    // Ensure userId is not empty or zero
+    if (!userId || isNaN(userId) || parseInt(userId) === 0) {
+        alert("Invalid user ID! Please select a valid user.");
+        return;
+    }
+
     let userData = {
-        name: $("#name").val(),
-        contact: $("#contact").val(),
-        address: $("#address").val(),
-        email: $("#email").val(),
+        u_id: parseInt(userId),  // Convert to integer
+        name: $("#name").val().trim(),
+        contact: $("#contact").val().trim(),
+        address: $("#address").val().trim(),
+        email: $("#email").val().trim(),
         role: $("#role").val(),
-        password: $("#password").val()
+        password: $("#password").val().trim()
     };
 
+    console.log("Sending data:", userData);  // Debugging log
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("No token found in localStorage");
+        alert("Authorization token is missing!");
+        return;
+    }
+
     $.ajax({
-        url: `http://localhost:8080/api/v1/user/update/${u_id}`,  // Check if correct ID is passed
+        url: `http://localhost:8080/api/v1/user/update`,
         method: "PUT",
         contentType: "application/json",
         data: JSON.stringify(userData),
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
         success: function (response) {
             alert("User updated successfully!");
+            console.log("Response:", response);
+            loadAllUsers();
         },
         error: function (xhr, status, error) {
             console.error("Update failed:", xhr.responseText);

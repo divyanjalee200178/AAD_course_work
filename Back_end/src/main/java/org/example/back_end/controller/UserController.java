@@ -3,6 +3,7 @@ package org.example.back_end.controller;
 import jakarta.validation.Valid;
 import org.example.back_end.dto.AuthDTO;
 import org.example.back_end.dto.ResponseDTO;
+import org.example.back_end.dto.SubjectDTO;
 import org.example.back_end.dto.UserDTO;
 import org.example.back_end.service.UserService;
 import org.example.back_end.service.impl.UserServiceImpl;
@@ -12,6 +13,7 @@ import org.example.back_end.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class UserController {
 
     private final JwtUtil jwtUtil;
     @PostMapping("save")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseUtil saveUser(@RequestBody UserDTO userDTO) {
         try {
             boolean res = userService.addUser(userDTO);
@@ -73,21 +76,14 @@ public class UserController {
     }
 
 
-    @PutMapping("update/{u_id}")
-    public ResponseEntity<ResponseUtil> updateUser(@PathVariable int u_id, @RequestBody UserDTO userDTO) {
-
-        try {
-            boolean updated = userService.updateUsers(u_id, userDTO); // Ensure correct method name
-            if (updated) {
-                return ResponseEntity.ok(new ResponseUtil(200, "User updated successfully", null));
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseUtil(404, "User not found", null));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseUtil(500, "Error updating user: " + e.getMessage(), null));
+    @PutMapping("update")
+    public ResponseUtil updateUser(@RequestBody UserDTO userDTO){
+        System.out.println(userDTO);  // Log the incoming request body
+        boolean isUpdated = userService.updateUsers(userDTO);
+        if (isUpdated) {
+            return new ResponseUtil(200, "User updated successfully!", null);
         }
+        return new ResponseUtil(500, "Error updating User!", null);
     }
 
     @DeleteMapping("delete/{u_id}")
