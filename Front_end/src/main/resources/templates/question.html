@@ -73,6 +73,7 @@
         <button class="btn btn-secondary" onclick="duplicateQuestion()">Duplicate Question</button>
 
         <button class="btn btn-warning" onclick="handleUpdate()">Update Question</button>
+        <button class="btn btn-warning" onclick="deleteQuestion()">Delete Question</button>
         <button class="btn btn-danger" onclick="clearForm()">Clear Form</button>
 
 
@@ -89,6 +90,7 @@
         <table class="table table-bordered mt-3">
             <thead>
             <tr>
+                <th>QuestionId</th>
                 <th>MCQ Number</th>
                 <th>Name</th>
                 <th>Content</th>
@@ -116,6 +118,8 @@
 <script>
     $(document).ready(function () {
         const token = localStorage.getItem("jwtToken"); // Get JWT token
+        console.log(localStorage.getItem("jwtToken"));
+
 
         if (!token) {
             alert("You are not logged in!");
@@ -160,18 +164,33 @@
         });
 
         $('#questionTableBody').on('click', 'tr', function () {
+            // Clear the previous values
             $("#questionId").val(""); // Auto-generated, not editable
-            $("#name").val($(this).find('td:eq(1)').text());
-            $("#content").val($(this).find('td:eq(2)').text());
-            $("#option1").val($(this).find('td:eq(3)').text());
-            $("#option2").val($(this).find('td:eq(4)').text());
-            $("#option3").val($(this).find('td:eq(5)').text());
-            $("#option4").val($(this).find('td:eq(6)').text());
-            $("#mcqNumber").val($(this).find('td:eq(0)').text());
-            $("#answer").val($(this).find('td:eq(7)').text());
-            $("#examId").val($(this).find('td:eq(8)').text());
-            $("#userId").val($(this).find('td:eq(9)').text());
+            $("#name").val("");
+            $("#content").val("");
+            $("#option1").val("");
+            $("#option2").val("");
+            $("#option3").val("");
+            $("#option4").val("");
+            $("#mcqNumber").val("");
+            $("#answer").val("");
+            $("#examId").val("");
+            $("#userId").val("");
+
+            // Populate the form fields with the selected row data
+            $("#questionId").val($(this).find('td:eq(0)').text()); // Assuming the first column is the Question ID
+            $("#mcqNumber").val($(this).find('td:eq(1)').text()); // Assuming the second column is MCQ Number
+            $("#name").val($(this).find('td:eq(2)').text()); // Assuming the third column is Name
+            $("#content").val($(this).find('td:eq(3)').text()); // Assuming the fourth column is Content
+            $("#option1").val($(this).find('td:eq(4)').text()); // Assuming the fifth column is Option 1
+            $("#option2").val($(this).find('td:eq(5)').text()); // Assuming the sixth column is Option 2
+            $("#option3").val($(this).find('td:eq(6)').text()); // Assuming the seventh column is Option 3
+            $("#option4").val($(this).find('td:eq(7)').text()); // Assuming the eighth column is Option 4
+            $("#answer").val($(this).find('td:eq(8)').text()); // Assuming the ninth column is Answer
+            $("#examId").val($(this).find('td:eq(9)').text()); // Assuming the tenth column is Exam ID
+            $("#userId").val($(this).find('td:eq(10)').text()); // Assuming the eleventh column is User ID
         });
+
     });
 
     function handleSubmitData() {
@@ -199,11 +218,11 @@
             data: JSON.stringify(questionData),
             success: function () {
                 alert("Question added successfully!");
-                fetchQuestionsByMcq();
+                // fetchQuestionsByMcq();
                 clearForm();
             },
             error: function () {
-                alert("Failed to add question!");
+                alert("Question added unsuccessfully!");
             }
         });
     }
@@ -236,9 +255,17 @@
     }
 
     function handleUpdate() {
-        const token = localStorage.getItem("jwtToken");
-        let id = $("#questionId").val();
-        const questionData = {
+        let qid = $("#questionId").val().trim(); // Ensure qid is not empty
+
+        if (!qid || isNaN(qid)) {
+            alert("Invalid Question ID! Please select a valid question.");
+            return;
+        }
+
+        qid = Number(qid);
+
+        const updatedQuestion = {
+            qid: qid,  // Ensure qid is correctly sent
             content: $("#content").val(),
             option1: $("#option1").val(),
             option2: $("#option2").val(),
@@ -250,21 +277,22 @@
             userId: parseInt($("#userId").val())
         };
 
+        const token = localStorage.getItem("jwtToken");
+
         $.ajax({
-            url: `http://localhost:8080/api/v1/questions/update/${id}`,
-            method: "PUT",
+            url: `http://localhost:8080/api/v1/questions/update`,
+            type: "PUT",
             headers: {
-                "Authorization": "Bearer " + token,
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            data: JSON.stringify(questionData),
-            success: function () {
+            data: JSON.stringify(updatedQuestion),
+            success: function (response) {
                 alert("Question updated successfully!");
-                fetchQuestionsByMcq();
                 clearForm();
             },
-            error: function () {
-                alert("Failed to update question!");
+            error: function (xhr) {
+                alert("Failed to update question: " + xhr.responseText);
             }
         });
     }
@@ -352,67 +380,85 @@
     }
 
 
+//**************************man meka comment kala*****************
 
-
-    function fetchQuestionsByMcq() {
-        let mcqNumber = $("#mcqNumber").val();
-
-        if (!mcqNumber || isNaN(mcqNumber)) {
-            alert("Please enter a valid MCQ Number!");
-            return;
-        }
-
-        $.ajax({
-            url: `http://localhost:8080/api/v1/questions/mcq/${mcqNumber}`,
-            method: "GET",
-            success: function (data) {
-                console.log(data);
-                displayQuestions(data);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error details: ", xhr.responseText, status, error);
-                alert("Failed to fetch questions!");
-            }
-        });
-    }
-
+    // function fetchQuestionsByMcq() {
+    //     let mcqNumber = $("#mcqNumber").val();
+    //     let token = localStorage.getItem("jwtToken"); // Retrieve JWT from localStorage
+    //
+    //     // Log token to the console for debugging
+    //     console.log("token : "+token);
+    //
+    //     // Validate MCQ number input
+    //     if (!mcqNumber || isNaN(mcqNumber)) {
+    //         alert("Please enter a valid MCQ Number!");
+    //         return;
+    //     }
+    //
+    //     // Check if token exists for authentication
+    //     if (!token) {
+    //         alert("User is not authenticated! Please log in.");
+    //         return;
+    //     }
+    //
+    //     // Make AJAX call to fetch questions
+    //     $.ajax({
+    //         url: `http://localhost:8080/api/v1/questions/mcq/${mcqNumber}`,
+    //         method: "GET",
+    //         headers: {
+    //             "Authorization": "Bearer " + token,
+    //             "Content-Type": "application/json"
+    //         },
+    //         success: function (data) {
+    //             console.log("Questions fetched successfully:", data);
+    //             displayQuestions(data);  // Function to display the fetched questions
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error("Error details:", xhr.responseText, status, error);
+    //             alert("Failed to fetch questions! Check your authentication.");
+    //         }
+    //     });
+    // }
+    //
 
     function loadAllSubjects() {
         $.ajax({
             url: "http://localhost:8080/api/v1/questions/get",
             type: "GET",
             success: function (data) {
-                console.log(data);
                 let tableBody = $("#questionTableBody");
                 tableBody.empty();
 
                 data.forEach(subject => {
+                    console.log(subject); // Log individual subject to verify field names
+                    let questionId = subject.qid ? subject.qid : 'N/A';  // Use qid instead of id
                     let userIdDisplay = subject.userId ? subject.userId : 'Not Assigned';
 
                     let row = `
-            <tr>
-                <td>${subject.mcqNumber}</td>
-                <td>${subject.name}</td>
-                <td>${subject.content}</td>
-                <td>${subject.option1}</td>
-                <td>${subject.option2}</td>
-                <td>${subject.option3}</td>
-                <td>${subject.option4}</td>
-                <td>${subject.answer}</td>
-                <td>${subject.examId}</td>
-                <td>${userIdDisplay}</td>
-
-            </tr>`;
+                <tr data-id="${subject.qid}">
+                    <td>${questionId}</td>
+                    <td>${subject.mcqNumber}</td>
+                    <td>${subject.name}</td>
+                    <td>${subject.content}</td>
+                    <td>${subject.option1}</td>
+                    <td>${subject.option2}</td>
+                    <td>${subject.option3}</td>
+                    <td>${subject.option4}</td>
+                    <td>${subject.answer}</td>
+                    <td>${subject.examId}</td>
+                    <td>${userIdDisplay}</td>
+                </tr>`;
 
                     tableBody.append(row);
                 });
-
             },
             error: function () {
                 alert("Error loading subjects.");
             }
         });
+
     }
+
 
     // <td>
     //     <button className="btn btn-info" onClick="viewQuestion(${subject.id})">View</button>
@@ -438,22 +484,29 @@
         tableBody.empty();
 
         questions.forEach(q => {
-            let row = `<tr>
-                    <td>${q.mcqNumber}</td>
-                    <td>${q.name}</td>
-                    <td>${q.content}</td>
-                    <td>${q.option1}</td>
-                    <td>${q.option2}</td>
-                    <td>${q.option3}</td>
-                    <td>${q.option4}</td>
-                    <td>${q.answer}</td>
-                    <td>${q.exam.id}</td>
-                    <td>${q.user.id}</td>
+            // Ensure that question ID exists
+            let questionId = q.id ? q.id : 'N/A';
+            let userIdDisplay = q.user && q.user.id ? q.user.id : 'Not Assigned';
 
-                   </tr>`;
+            let row = `
+            <tr>
+                <td>${questionId}</td>
+                <td>${q.mcqNumber}</td>
+                <td>${q.name}</td>
+                <td>${q.content}</td>
+                <td>${q.option1}</td>
+                <td>${q.option2}</td>
+                <td>${q.option3}</td>
+                <td>${q.option4}</td>
+                <td>${q.answer}</td>
+                <td>${q.exam.id}</td>
+                <td>${userIdDisplay}</td>
+            </tr>`;
+
             tableBody.append(row);
         });
     }
+
 
     // <td>
     //     <button className="btn btn-info" onClick="viewQuestion(${subject.id})">View</button>

@@ -76,7 +76,7 @@
 
     // Fetch JWT token
     function getJWTToken() {
-        return localStorage.getItem("token");  // Retrieve JWT token from localStorage
+        return localStorage.getItem("token");
     }
 
     async function loadQuestionsForExam(examId) {
@@ -94,7 +94,7 @@
 
             let allQuestions = await response.json();
 
-            // 🔹 Filter questions for the selected examId
+
             questionsData = allQuestions.filter(q => q.examId === parseInt(examId));
 
             if (questionsData.length === 0) {
@@ -118,7 +118,7 @@
 
 
 
-    // Render questions to the page
+
     function renderQuestions() {
         const questionsHTML = questionsData.map(q => `
         <div class="question">
@@ -160,7 +160,7 @@
     // Submit answers to the server
     async function submitAnswers() {
         try {
-            const examId = document.getElementById('examId').value; // Get the selected exam ID
+            const examId = document.getElementById('examId').value;
             const token = getJWTToken();
             const response = await fetch('http://localhost:8080/api/v1/question/submit1?examId=' + examId, {
                 method: 'POST',

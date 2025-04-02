@@ -1,6 +1,7 @@
 package org.example.back_end.controller;
 
 import org.example.back_end.dto.QuestionDTO;
+import org.example.back_end.dto.QuestionsDTO;
 import org.example.back_end.dto.SubjectDTO;
 import org.example.back_end.entity.Exam;
 import org.example.back_end.entity.Question;
@@ -8,10 +9,12 @@ import org.example.back_end.entity.User;
 import org.example.back_end.repo.ExamRepo;
 import org.example.back_end.repo.UserRepo;
 import org.example.back_end.service.QuestionService;
+import org.example.back_end.util.ResponseUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +38,8 @@ public class QuestionController {
     private ModelMapper modelMapper;
 
     @PostMapping("/post")
-    public ResponseEntity<?> addQuestion(@RequestBody QuestionDTO questionDTO) {
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ResponseUtil addQuestion(@RequestBody QuestionDTO questionDTO) {
         try {
             // Convert DTO to Entity
             Question question = new Question();
@@ -58,9 +62,9 @@ public class QuestionController {
             question.setUser(user);
 
             Question savedQuestion = questionService.addQuestion(question);
-            return ResponseEntity.ok(savedQuestion);
+            return new ResponseUtil(201, "Subject saved successfully", null);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return new ResponseUtil(500, "Subject saved unsuccessfully", null);
         }
     }
 
@@ -88,11 +92,17 @@ public class QuestionController {
     }
 
 
-    @PutMapping("/{id}")
-    public Question updateQuestion(@PathVariable Long id, @RequestBody Question question) {
-        question.setQid(id);
-        return questionService.updateQuestion(question);
+    @PutMapping("update")
+    public ResponseUtil updateQuestion(@RequestBody QuestionsDTO questionDTO) {
+        System.out.println("Updating Question: " + questionDTO);
+
+        boolean isUpdated = questionService.updateQuestion(questionDTO);
+        if (isUpdated) {
+            return new ResponseUtil(200, "Question updated successfully!", null);
+        }
+        return new ResponseUtil(500, "Error updating question!", null);
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteQuestion(@PathVariable Long id) {

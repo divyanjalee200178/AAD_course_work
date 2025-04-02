@@ -127,6 +127,8 @@ public class WebSecurityConfig {
                                 "/api/v1/subject/get",
                                 "/api/v1/exam/get",
                                 "/api/v1/questions/get",
+                                "/api/v1/questions/mcq/**",
+                                "/api/v1/questions/update",
                                 "/api/v1/question/get",
                                 "/api/v1/user/**",
                                 "/api/v1/results/**",

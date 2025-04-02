@@ -1,12 +1,9 @@
 package org.example.back_end.service.impl;
 
-import jakarta.transaction.Transactional;
+import exception.ResourceNotFoundException;
 import org.example.back_end.dto.QuestionDTO;
-import org.example.back_end.dto.SubjectDTO;
-import org.example.back_end.entity.Exam;
+import org.example.back_end.dto.QuestionsDTO;
 import org.example.back_end.entity.Question;
-import org.example.back_end.entity.Subject;
-import org.example.back_end.entity.User;
 import org.example.back_end.repo.ExamRepo;
 import org.example.back_end.repo.QuestionRepo;
 import org.example.back_end.repo.UserRepo;
@@ -71,14 +68,25 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
 
-    @Override
-    @Transactional
-    public Question updateQuestion(Question question) {
-        if (question.getExam() == null || question.getUser() == null) {
-            throw new IllegalArgumentException("Exam and User must be provided");
-        }
-        return this.questionRepo.save(question);
+    public boolean updateQuestion(QuestionsDTO questionsDTO) {
+        Question question = questionRepo.findById(questionsDTO.getQid())
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
+
+        question.setContent(questionsDTO.getContent());
+        question.setOption1(questionsDTO.getOption1());
+        question.setOption2(questionsDTO.getOption2());
+        question.setOption3(questionsDTO.getOption3());
+        question.setOption4(questionsDTO.getOption4());
+        question.setAnswer(questionsDTO.getAnswer());
+        question.setMcqNumber(questionsDTO.getMcqNumber());
+
+
+        questionRepo.save(question);
+        return false;
     }
+
+
+
 
     @Override
     public void deleteQuestion(Long questionId) {
