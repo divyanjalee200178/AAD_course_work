@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paper</title>
+    <link rel="stylesheet" href="../css/all/paper.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,6 +49,10 @@
     </style>
 </head>
 <body>
+<div class="header">
+    <h1>Exam Paper</h1>
+</div>
+
 <label for="examId" class="form-label">Exam ID:</label>
 <select id="examId" class="form-control mb-2" required>
     <option value="" disabled selected>Select Exam</option>
@@ -58,9 +63,7 @@
     <option value="" disabled selected>Select User</option> <!-- Placeholder -->
 </select>
 
-<div class="header">
-    <h1>Exam Paper</h1>
-</div>
+
 
 <div class="container" id="examPaper"></div>
 

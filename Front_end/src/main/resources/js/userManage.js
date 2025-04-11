@@ -61,13 +61,14 @@ function loadNextId() {
     })
         .then(response => {
             if (!response.ok) throw new Error("Unauthorized access!");
-            return response.text();
+            return response.json(); // Parse response as JSON
         })
         .then(nextId => {
-            // Change from id to u_id to match your HTML field's ID
+            console.log("Next ID received:", nextId); // Debugging line
+
             const uIdInput = document.getElementById("u_id");
             if (uIdInput) {
-                uIdInput.value = nextId; // Set the next ID value
+                uIdInput.value = nextId; // Set value correctly
             } else {
                 console.error("Element with id 'u_id' not found.");
             }
@@ -80,18 +81,18 @@ function loadNextId() {
 
 
 function updateData() {
-    let userId = $("#u_id").val().trim();  // Get user ID from input and trim spaces
+    let userId = $("#u_id").val().trim();
 
-    console.log("Retrieved user ID:", userId);  // Debugging log
+    console.log("Retrieved user ID:", userId);
 
-    // Ensure userId is not empty or zero
+
     if (!userId || isNaN(userId) || parseInt(userId) === 0) {
         alert("Invalid user ID! Please select a valid user.");
         return;
     }
 
     let userData = {
-        u_id: parseInt(userId),  // Convert to integer
+        u_id: parseInt(userId),
         name: $("#name").val().trim(),
         contact: $("#contact").val().trim(),
         address: $("#address").val().trim(),
@@ -100,7 +101,7 @@ function updateData() {
         password: $("#password").val().trim()
     };
 
-    console.log("Sending data:", userData);  // Debugging log
+    console.log("Sending data:", userData);
 
     const token = localStorage.getItem("token");
     if (!token) {

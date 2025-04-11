@@ -36,9 +36,10 @@ function loadNextId() {
     })
         .then(response => {
             if (!response.ok) throw new Error("Unauthorized access!");
-            return response.text();
+            return response.json();
         })
         .then(nextId => {
+            console.log('Next ID fetched:', nextId);
             document.getElementById("id").value = nextId;
         })
         .catch(error => {
@@ -46,6 +47,7 @@ function loadNextId() {
             alert("Authentication required!");
         });
 }
+
 
 function saveData() {
     let token = localStorage.getItem("token");
@@ -103,16 +105,14 @@ function saveData() {
 }
 
 
-
-// Function to update the subject data
 function updateData() {
 
-    const id = $('#id').val();  // Get ID from the input field
-    const name = $('#name').val();  // Get name from the input field
-    const st_count = $('#st_count').val();  // Get student count from the input field
-    const u_id = $('#u_id').val();  // Get user ID from the select field
-    const date = $('#date').val();  // Get date from the input field
-    const time = $('#time').val();  // Get time from the input field
+    const id = $('#id').val();
+    const name = $('#name').val();
+    const st_count = $('#st_count').val();
+    const u_id = $('#u_id').val();
+    const date = $('#date').val();
+    const time = $('#time').val();
 
     const updatedSubject = {
         id: id,
@@ -123,7 +123,7 @@ function updateData() {
         time: time
     };
 
-    const token = localStorage.getItem('token'); // Get JWT token from localStorage
+    const token = localStorage.getItem('token');
     if (!token) {
         console.error('No token found in localStorage');
         return;
@@ -132,16 +132,16 @@ function updateData() {
 
     // Sending the updated data to the backend via PUT request
     $.ajax({
-        url: `http://localhost:8080/api/v1/subject/update`,  // Send PUT request with the subject ID
+        url: `http://localhost:8080/api/v1/subject/update`,
         type: 'PUT',
         headers: {
-            'Authorization': `Bearer ${token}`  // Include JWT token for authorization
+            'Authorization': `Bearer ${token}`
         },
-        data: JSON.stringify(updatedSubject),  // Send updated data in JSON format
+        data: JSON.stringify(updatedSubject),
         contentType: 'application/json',
         success: function(response) {
             console.log('Subject updated successfully:', response);
-            loadAllSubjects();  // Reload subjects to reflect updated data
+            loadAllSubjects();
         },
         error: function(xhr, status, error) {
             console.error('Error updating subject:', xhr.responseText);

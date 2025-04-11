@@ -1,8 +1,10 @@
 package org.example.back_end.controller;
 
+import org.example.back_end.exception.CustomException;
 import org.example.back_end.dto.ExamDTO;
-import org.example.back_end.dto.UserDTO;
 import org.example.back_end.entity.Exam;
+import org.example.back_end.exception.UserDetailsNotFoundException;
+import org.example.back_end.exception.UserIdNotFoundException;
 import org.example.back_end.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +23,16 @@ public class ExamController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createExam(@RequestBody Exam exam) {
-        boolean success = examService.createExam(exam);
-        if (success) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Exam created successfully.");
+        try {
+            boolean success = examService.createExam(exam);
+            if (success) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Exam created successfully.");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating exam.");
+            }
+        } catch (UserDetailsNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating exam.");
     }
 
     @GetMapping("/get")
@@ -64,10 +71,17 @@ public class ExamController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteExam(@PathVariable Integer id) {
-        boolean success = examService.deleteExam(id);
-        if (success) {
-            return ResponseEntity.ok("Exam deleted successfully.");
+        try {
+            boolean success = examService.deleteExam(id);
+            if (success) {
+                return ResponseEntity.ok("Exam deleted successfully.");
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating exam.");
+            }
+        } catch (UserIdNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error deleting exam.");
     }
+
+
 }

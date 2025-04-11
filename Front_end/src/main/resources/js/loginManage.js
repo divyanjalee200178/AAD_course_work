@@ -37,15 +37,16 @@ $(document).ready(function () {
                     const decoded = jwt_decode(token);
                     let role = decoded.role || "";
 
+//add role==ADMIN,STUDENT,TEACHER
 
                     console.log("Decoded token:", decoded);
                     console.log("Role from decoded token:", role);
                     // Redirect based on the role
-                    if (role === "ROLE_ADMIN" || role === "Admin") {
+                    if (role === "ROLE_ADMIN" || role === "Admin" || role=="ADMIN") {
                         window.location.href = "../static/dash.html";
-                    } else if (role === "ROLE_STUDENT" || role === "Student") {
+                    } else if (role === "ROLE_STUDENT" || role === "Student" || role=="STUDENT") {
                         window.location.href = "../static/studentDash.html";
-                    } else if (role === "ROLE_TEACHER" || role === "Teacher") {
+                    } else if (role === "ROLE_TEACHER" || role === "Teacher" || role=="REACHER") {
                         window.location.href = "../static/studentDash.html";
                     } else {
                         alert("Invalid role: " + role);

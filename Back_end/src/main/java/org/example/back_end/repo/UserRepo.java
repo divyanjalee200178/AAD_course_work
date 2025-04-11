@@ -16,9 +16,12 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     @Query("SELECT u.u_id FROM User u WHERE u.role IN ('Teacher', 'Admin')")
     List<Integer> findAllIdsByRole();
-    
 
-//    jwt
+    @Query("SELECT MAX(u.u_id) FROM User u")
+    Integer findMaxId();
+
+
+    //    jwt
     User findByEmail(String userName);
 
     boolean existsByEmail(String userName);

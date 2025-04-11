@@ -51,9 +51,10 @@ public class SubjectController {
         System.out.println(subjectDTO);  // Log the incoming request body
         boolean isUpdated = subjectService.updateSubject(subjectDTO);
         if (isUpdated) {
-                return new ResponseUtil(200, "Subject updated successfully!", null);
-            }
-                return new ResponseUtil(500, "Error updating subject!", null);
+            return new ResponseUtil(200, "Subject updated successfully!", null);
+        }
+        return new ResponseUtil(500, "Error updating subject!", null);
+    }
 //        try {
 //            SubjectDTO existingSubject = subjectService.getSubjectById(id);
 //
@@ -80,7 +81,7 @@ public class SubjectController {
 //        } catch (Exception e) {
 //            return new ResponseUtil(500, "Error updating subject: " + e.getMessage(), null);
 //        }
-    }
+
 
     @DeleteMapping("delete/{id}")
     public boolean deleteSubject(@PathVariable int id) {

@@ -11,6 +11,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,22 +54,32 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
 
-    public int getNextSubjectId() {
-        List<Integer> allIds = subjectRepo.findAllIds();
+//    public int getNextSubjectId() {
+//        List<Integer> allIds = subjectRepo.findAllIds();
+//
+//        if (allIds.isEmpty()) {
+//            return 1;
+//        }
+//        for (int i = 1; i <= allIds.size(); i++) {
+//            if (!allIds.contains(i)) {
+//                return i;
+//            }
+//        }
+//
+//        return allIds.size() + 1;
+//    }
 
-        if (allIds.isEmpty()) {
+    public int getNextSubjectId() {
+        Integer maxId = subjectRepo.findMaxId(); // Fetch the maximum existing ID
+
+        // If no subjects exist, return 1
+        if (maxId == null) {
             return 1;
         }
-        for (int i = 1; i <= allIds.size(); i++) {
-            if (!allIds.contains(i)) {
-                return i;
-            }
-        }
 
-        return allIds.size() + 1;
+        // Return the next available ID by incrementing the maximum ID
+        return maxId + 1;
     }
-
-
 
 //    public int getNextSubjectId() {
 //        Integer maxId = subjectRepo.findMaxId();
@@ -110,13 +121,34 @@ public class SubjectServiceImpl implements SubjectService {
 //        return true;  // Return true to indicate that the update was successful
 //    }
 
+//    public boolean updateSubject(SubjectDTO subjectDTO) {
+//        if (subjectRepo.findById(subjectDTO.getId())==null){
+//            throw new RuntimeException("no subject found");
+//        }
+//
+//        subjectRepo.save(modelMapper.map(subjectDTO, Subject.class));
+//        return true;  // Return true to indicate that the update was successful
+//    }
+
     public boolean updateSubject(SubjectDTO subjectDTO) {
-        if (subjectRepo.findById(subjectDTO.getId())==null){
-            throw new RuntimeException("no subject found");
+        Subject existing = subjectRepo.findById(subjectDTO.getId()).orElse(null);
+        if (existing == null) {
+            throw new RuntimeException("No subject found");
         }
 
-        subjectRepo.save(modelMapper.map(subjectDTO, Subject.class));
-        return true;  // Return true to indicate that the update was successful
+        existing.setName(subjectDTO.getName());
+        existing.setSt_count(subjectDTO.getSt_count());
+        existing.setDate(subjectDTO.getDate());
+        existing.setTime(subjectDTO.getTime());
+
+        if (subjectDTO.getUserId() != null) {
+            User user = userRepo.findById(subjectDTO.getUserId()).orElse(null);
+            if (user == null) throw new RuntimeException("User not found");
+            existing.setUser(user);
+        }
+
+        subjectRepo.save(existing);
+        return true;
     }
 
 

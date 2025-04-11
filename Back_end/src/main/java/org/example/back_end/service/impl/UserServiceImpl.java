@@ -60,19 +60,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
 
+//    public int getNextUserId() {
+//        List<Integer> allIds = userRepo.findAllIds();
+//
+//        if (allIds.isEmpty()) {
+//            return 1;
+//        }
+//        for (int i = 1; i <= allIds.size(); i++) {
+//            if (!allIds.contains(i)) {
+//                return i;
+//            }
+//        }
+//
+//        return allIds.size() + 1;
+//    }
+
     public int getNextUserId() {
-        List<Integer> allIds = userRepo.findAllIds();
-
-        if (allIds.isEmpty()) {
-            return 1;
-        }
-        for (int i = 1; i <= allIds.size(); i++) {
-            if (!allIds.contains(i)) {
-                return i;
-            }
-        }
-
-        return allIds.size() + 1;
+        Integer maxId = userRepo.findMaxId();
+        return (maxId == null) ? 1 : maxId + 1;
     }
 
     public List<Integer> getUserIdsByRole() {

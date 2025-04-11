@@ -1,0 +1,155 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: radial-gradient(circle, rgba(117,120,138,1) 0%, rgba(227,217,219,1) 100%);
+}
+
+.header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 1rem; /* පේඩිං අඩු කර ඇත */
+    text-align: center;
+    margin-bottom: 1.5rem; /* මාර්ජින් අඩු කර ඇත */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* සැහැල්ලු shadow */
+    border-radius: 8px; /* අඩු border radius */
+}
+
+.header h1 {
+    font-size: 1.5rem; /* හෙඩින්ග් ප්‍රමාණය අඩු කර ඇත */
+    margin: 0;
+    padding: 0.5rem 0; /* හෙඩින්ග් පේඩිං */
+    font-weight: 500; /
+    }
+
+.container {
+    background: linear-gradient(90deg, rgba(202,202,221,1) 0%, rgba(136,138,213,1) 48%, rgba(167,229,240,1) 100%);
+    border-radius: 15px;
+    padding: 2.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(0deg, rgba(195,161,34,1) 0%, rgba(166,125,37,1) 100%);
+    border-radius: 10px;
+    border-left: 4px solid #3498db;
+    transition: transform 0.2s;
+}
+
+.question:hover {
+    transform: translateX(5px);
+}
+
+.options label {
+    display: block;
+    margin: 12px 0;
+    padding: 12px;
+    background: #fff;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.options label:hover {
+    border-color: #3498db;
+    background: #f8fbff;
+}
+
+.options input[type="checkbox"]:checked + label {
+    background: #e3f2fd;
+    border-color: #3498db;
+    font-weight: 600;
+}
+
+button {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+}
+
+.result {
+    text-align: center;
+    padding: 2rem;
+    background: #e8f5e9;
+    border-radius: 10px;
+    color: #2e7d32;
+    margin: 2rem 0;
+    border: 2px solid #c8e6c9;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+hr {
+    border: 1px solid #eee;
+    margin: 2rem 0;
+}
+
+h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 12px;
+    margin-bottom: 2rem;
+}
+label[for="examId"],
+label[for="userId"] {
+    display: inline-block;
+    width: 20%;
+    margin-right: -4%;
+    vertical-align: middle;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+#examId,
+#userId {
+    display: inline-block;
+    width: 70%;
+    margin-right: 2%;
+    vertical-align: middle;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232c3e50" width="18" height="18"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 2px solid #b0bec5;
+}
+
+#userId {
+    margin-right: 0;
+}
+
+/******************************************/
+
+
