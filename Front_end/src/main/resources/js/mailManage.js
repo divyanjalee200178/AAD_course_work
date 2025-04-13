@@ -444,13 +444,13 @@ function loadExams() {
                     examDescriptions.push($(this).data('name'));
                     examDurations.push("Duration: " + $(this).data('duration') + " hours");
 
-                    // Prepare the body with detailed info on separate lines
+
                     bodyText += $(this).data('name') + "\n" + "Duration: " + $(this).data('duration') + " hours\n\n";
                 });
 
-                // Set the 'subject' to the descriptions of the selected exams (comma-separated)
+
                 $('#subject').val(examDescriptions.join(', '));
-                // Set the 'body' with detailed info on separate lines
+
                 $('#body').val(bodyText.trim());
             });
         },

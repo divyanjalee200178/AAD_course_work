@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 // Fetch the JWT token from localStorage
 function getToken() {
-    return localStorage.getItem("token");
+    return localStorage.getItem("jwtToken");
 }
 
 function loadNextResultId() {

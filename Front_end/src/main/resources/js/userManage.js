@@ -38,6 +38,7 @@ function saveData() {
             $("#userForm")[0].reset();
             loadNextId();
             loadAllUsers();
+            clearFields();
         },
         error: function (xhr) {
             alert("Error: " + xhr.responseText);
@@ -45,7 +46,8 @@ function saveData() {
     });
 }
 function loadNextId() {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("jwtToken");
+    console.log("u_token",token)
 
     if (!token) {
         alert("Not authenticated!");
@@ -75,16 +77,20 @@ function loadNextId() {
         })
         .catch(error => {
             console.error("Error fetching next ID:", error);
-            alert("Authentication required!");
+            // alert("Authentication required!");
         });
 }
 
 
 function updateData() {
+    let token = localStorage.getItem("jwtToken");
+    if (!token) {
+        console.error("No token found in localStorage");
+        alert("Authorization token is missing!");
+        return;
+    }
+
     let userId = $("#u_id").val().trim();
-
-    console.log("Retrieved user ID:", userId);
-
 
     if (!userId || isNaN(userId) || parseInt(userId) === 0) {
         alert("Invalid user ID! Please select a valid user.");
@@ -101,27 +107,19 @@ function updateData() {
         password: $("#password").val().trim()
     };
 
-    console.log("Sending data:", userData);
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found in localStorage");
-        alert("Authorization token is missing!");
-        return;
-    }
-
     $.ajax({
-        url: `http://localhost:8080/api/v1/user/update`,
+        url: "http://localhost:8080/api/v1/user/update",
         method: "PUT",
         contentType: "application/json",
-        data: JSON.stringify(userData),
         headers: {
-            "Authorization": `Bearer ${token}`
+            "Authorization": "Bearer " + token
         },
+        data: JSON.stringify(userData),
         success: function (response) {
             alert("User updated successfully!");
             console.log("Response:", response);
             loadAllUsers();
+            clearFields();
         },
         error: function (xhr, status, error) {
             console.error("Update failed:", xhr.responseText);
@@ -169,6 +167,7 @@ function deleteData() {
         success: function () {
             alert("User deleted successfully!");
             loadAllUsers();
+            clearFields();
         },
         error: function () {
             alert("Error deleting User.");
@@ -176,3 +175,12 @@ function deleteData() {
     });
 }
 
+function clearFields() {
+    $("#u_id").val('');
+    $("#name").val('');
+    $("#contact").val('');
+    $("#address").val('');
+    $("#email").val('');
+    $("#role").val('');
+    $("#password").val('');
+}

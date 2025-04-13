@@ -34,6 +34,7 @@ public class SubjectController {
 
 
     @GetMapping("next-id")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public int getNextSubjectId() {
         return subjectService.getNextSubjectId();
     }

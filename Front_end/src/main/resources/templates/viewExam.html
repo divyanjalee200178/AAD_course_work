@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/all/viewExam.css">
+
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logo-text">
+            <span>ORIGINAL</span>
+            <span class="logo-title">Result</span>
+        </div>
+    </div>
+    <div class="header-title">Exam Result Generator</div>
+    <div class="header-icons">
+        <a href="#"><i class="fas fa-user"></i></a>
+        <a href="#"><i class="fas fa-chevron-right"></i></a>
+    </div>
+</header>
+
+<div class="breadcrumb">
+    <a href="index.html"><i class="fas fa-home"></i> Home</a> /
+    <a href="login.html">login</a>
+</div>
+
+<div class="main-container">
+    <div class="sidebar">
+        <div class="user-profile">
+            <div class="user-name">Student panel</div>
+
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="viewResul.html"><i class=""></i> 🥇 Result</a></li>
+            <li><a href="paper.html"><i class=""></i> 📚 All Ready Paper</a></li>
+            <li><a href="paper2.html" class="active"><i class=""></i> 📄 Papers</a></li>
+            <li><a href="viewExam.html"><i class=""></i> 📝 Exam</a></li>
+            <li><a href="../static/studentDash.html"><i class=""></i> 💾 Dashboard</a></li>
+        </ul>
+    </div>
+
+    <div class="content-area">
+        <div class="container">
+            <h2>Exam Results</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Exam ID</th>
+                    <th>Duration</th>
+                    <th>Description</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+                </thead>
+                <tbody id="examTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        viewExams();
+    });
+
+    function getToken() {
+        return localStorage.getItem("jwtToken");
+    }
+
+    function viewExams() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/exam/get",
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + getToken()
+            },
+            success: function (response) {
+                let tableBody = $("#examTableBody");
+                tableBody.empty();
+                if (response && Array.isArray(response) && response.length > 0) {
+                    response.forEach(exam => {
+                        tableBody.append(`
+                            <tr>
+                                <td>${exam.id}</td>
+                                <td>${exam.duration}</td>
+                                <td>${exam.description}</td>
+                                <td>${new Date(exam.startDate).toLocaleString()}</td>
+                                <td>${new Date(exam.endDate).toLocaleString()}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tableBody.append('<tr><td colspan="5">No exams found.</td></tr>');
+                }
+            },
+            error: function (xhr) {
+                alert("Error fetching exams: " + xhr.responseText);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

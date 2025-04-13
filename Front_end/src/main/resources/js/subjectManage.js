@@ -20,13 +20,13 @@ $(document).ready(function () {
 });
 
 function loadNextId() {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("jwtToken");
 
     if (!token) {
         alert("Not authenticated!");
         return;
     }
-
+    console.log("token:"+ token)
     fetch("http://localhost:8080/api/v1/subject/next-id", {
         method: "GET",
         headers: {
@@ -35,7 +35,9 @@ function loadNextId() {
         }
     })
         .then(response => {
-            if (!response.ok) throw new Error("Unauthorized access!");
+            if (response.status === 403) {
+                throw new Error("Unauthorized access!");
+            }
             return response.json();
         })
         .then(nextId => {
@@ -49,13 +51,18 @@ function loadNextId() {
 }
 
 
+function getToken() {
+    return localStorage.getItem("jwtToken");
+}
 function saveData() {
-    let token = localStorage.getItem("token");
-
+    let token =getToken();
+    console.log(localStorage.getItem("jwtToken"));
     if (!token) {
         alert("You need to log in!");
         return;
     }
+
+
 
     let userId = $("#u_id").val();
     if (!userId) {
@@ -78,7 +85,7 @@ function saveData() {
         method: "POST",
         contentType: "application/json",
         dataType: "json",
-        headers: { "Authorization": "Bearer " + token },  // Add JWT Token
+        headers: { "Authorization": "Bearer " + token },
         data: JSON.stringify(subData),
         success: function (resp) {
             alert(resp.msg);
@@ -123,14 +130,13 @@ function updateData() {
         time: time
     };
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwtToken');
     if (!token) {
         console.error('No token found in localStorage');
         return;
     }
 
 
-    // Sending the updated data to the backend via PUT request
     $.ajax({
         url: `http://localhost:8080/api/v1/subject/update`,
         type: 'PUT',
@@ -151,7 +157,7 @@ function updateData() {
 }
 
 function loadAllSubjects() {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("jwtToken");
     if (!token) {
         alert("You need to log in!");
         return;
@@ -187,7 +193,7 @@ function loadAllSubjects() {
 }
 
 function loadUserIds() {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem("jwtToken");
     if (!token) {
         alert("You need to log in!");
         return;
@@ -196,7 +202,7 @@ function loadUserIds() {
     $.ajax({
         url: "http://localhost:8080/api/v1/user/get",
         type: "GET",
-        headers: { "Authorization": "Bearer " + token },  // Add JWT Token
+        headers: { "Authorization": "Bearer " + token },
         success: function (data) {
             let cmbCustomer = $("#u_id");
             cmbCustomer.empty();
@@ -218,31 +224,31 @@ function loadUserIds() {
 
 
 function deleteData() {
-    let id = $("#id").val();  // Get the id of the subject to delete
+    let id = $("#id").val();
 
     if (!id) {
         alert("Please select a subject to delete.");
         return;
     }
 
-    let token = localStorage.getItem("token");  // Get JWT token from localStorage
+    let token = localStorage.getItem("jwtToken");
 
     if (!token) {
         alert("You need to log in!");
         return;
     }
 
-    // Send the DELETE request to the backend
+
     $.ajax({
-        url: `http://localhost:8080/api/v1/subject/delete/${id}`,  // Correct URL to match your backend route
+        url: `http://localhost:8080/api/v1/subject/delete/${id}`,
         type: "DELETE",
         headers: {
-            "Authorization": "Bearer " + token  // Include token in headers for authentication
+            "Authorization": "Bearer " + token
         },
         success: function () {
-            alert("Subject deleted successfully!");  // Alert on success
-            loadAllSubjects();  // Reload the list of subjects
-            loadNextId();  // Optionally reload the next available ID if needed
+            alert("Subject deleted successfully!");
+            loadAllSubjects();
+            loadNextId();
         },
         error: function (xhr, status, error) {
             console.error("Error deleting subject:", error);

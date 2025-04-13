@@ -62,6 +62,8 @@ h2 {
     padding: 10px;
 }
 
+
+
 .form-control::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
@@ -361,7 +363,7 @@ body {
     top: 0;
     height: 100vh;
     width: 200px;
-    background: #4a55a2;
+    background: #574e49;
     color: white;
     padding: 1rem;
     box-shadow: 2px 0 5px rgba(0,0,0,.1);
@@ -372,7 +374,7 @@ body {
     margin-left: 200px;
     font-family: 'Arial', sans-serif;
     background-color: #3EECAC;
-    background-image: linear-gradient(19deg, #3EECAC 0%, #EE74E1 100%);
+    background-image: linear-gradient(19deg, #3d37e0 0%, #3eecac 100%);
 
 }
 
@@ -410,3 +412,439 @@ body {
     color: #d0d0d0 !important;
     letter-spacing: 0.5px;
 }
+/* Blue-themed Unique Form Elements Design */
+
+/* Form Container with Blue Gradient */
+form {
+    background: linear-gradient(135deg, #43cea2, #185a9d, #6B8CFF);
+    padding: 35px;
+    border-radius: 20px;
+    margin: 80px auto;
+    width: 90%;
+    max-width: 800px;
+    box-shadow:
+            0 10px 25px rgba(0, 0, 0, 0.2),
+            0 20px 48px rgba(0, 0, 0, 0.1),
+            inset 0 -5px 16px rgba(255, 255, 255, 0.2);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Decorative Form Elements */
+form::before, form::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+form::before {
+    top: -80px;
+    right: -80px;
+    width: 200px;
+    height: 200px;
+    background: rgba(67, 206, 162, 0.15);
+    backdrop-filter: blur(5px);
+}
+
+form::after {
+    bottom: -60px;
+    left: -60px;
+    width: 150px;
+    height: 150px;
+    background: rgba(24, 90, 157, 0.15);
+    backdrop-filter: blur(5px);
+}
+
+/* Glassmorphism Form Title */
+form h2 {
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+form h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 60px;
+    border-radius: 2px;
+    background: linear-gradient(to right, #43cea2, #6B8CFF);
+}
+
+/* Unique Labels */
+.form-label {
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 10px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: block;
+    padding-left: 10px;
+}
+
+.form-label::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 16px;
+}
+
+/* Unique Text Fields with Blue Accents */
+.form-control {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    box-shadow:
+            inset 0 2px 4px rgba(0, 0, 0, 0.1),
+            0 1px 2px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(107, 140, 255, 0.3);
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow:
+            0 0 0 3px rgba(107, 140, 255, 0.3),
+            inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transform: translateY(-2px);
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+textarea.form-control {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Create Blue Glow Effect on Focus */
+.form-control:focus {
+    animation: blue-glow 1.5s ease infinite alternate;
+}
+
+@keyframes blue-glow {
+    from {
+        box-shadow: 0 0 5px rgba(107, 140, 255, 0.3);
+    }
+    to {
+        box-shadow: 0 0 15px rgba(107, 140, 255, 0.5);
+    }
+}
+
+/* Unique Buttons with Blue Theme */
+.btn {
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-right: 12px;
+    margin-top: 10px;
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: all 0.6s ease;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Button Color Variants with Blue Gradients */
+.btn-primary {
+    background: linear-gradient(45deg, #2c3136, #43cea2);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(45deg, #2c2f34, #00d2ff);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #212223, #EC6EAD);
+    color: white;
+}
+
+.btn-info {
+    background: linear-gradient(45deg, #6BBED9, #2f353a);
+    color: white;
+}
+
+/* Add subtle pulse effect to primary button */
+.btn-primary {
+    animation: blue-pulse 2s infinite;
+}
+
+@keyframes blue-pulse {
+    0% {
+        box-shadow: 0 4px 10px rgba(67, 206, 162, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(67, 206, 162, 0.4);
+    }
+    100% {
+        box-shadow: 0 4px 10px rgba(67, 206, 162, 0.2);
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    form {
+        padding: 25px;
+        margin-top: 40px;
+    }
+
+    .btn {
+        margin-bottom: 12px;
+        width: 100%;
+    }
+}
+
+/* Optional: Custom Checkbox/Radio design with Blue Theme */
+input[type="checkbox"], input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(107, 140, 255, 0.4);
+    vertical-align: middle;
+    margin-right: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    border-radius: 50%;
+}
+
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background: linear-gradient(45deg, #185a9d, #43cea2);
+    border-color: transparent;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    left: 5px;
+    top: 0px;
+}
+
+input[type="radio"]:checked::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    left: 4px;
+    top: 4px;
+}
+
+/* Select Element Styling */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 12px) center;
+    padding-right: 30px;
+}
+
+/* Create shimmery input fields on hover */
+.form-control:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(107, 140, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+/* Add water ripple effect on form */
+.water-ripple {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(107, 140, 255, 0.4);
+    animation: ripple 3s linear infinite;
+    opacity: 0;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20);
+        opacity: 0;
+    }
+}
+
+/* Add several water ripples at different positions */
+.water-ripple:nth-child(1) {
+    top: 20%;
+    left: 30%;
+    animation-delay: 0s;
+}
+
+.water-ripple:nth-child(2) {
+    top: 70%;
+    left: 70%;
+    animation-delay: 1s;
+}
+
+.water-ripple:nth-child(3) {
+    top: 40%;
+    left: 60%;
+    animation-delay: 2s;
+}
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.table thead {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.table thead th {
+    padding: 16px 20px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 600;
+    color: #070707;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.table tbody td {
+    padding: 14px 20px;
+    font-size: 15px;
+    color: #0c0c0c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(250, 252, 250, 0.56);
+}
+
+.table-bordered {
+    border: none;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: none !important;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid black;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th,
+.table tbody td {
+    border: 1px solid black;
+    padding: 14px 20px;
+    color: white;
+    font-size: 15px;
+}
+
+.table thead th {
+    background-color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+    text-align: left;
+}
+
+.table tbody td {
+    background: rgba(0, 0, 0, 0.2);
+}
+.sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    color: white;
+    padding-top: 10px;
+    position: fixed;
+    width: 240px;
+    z-index: 999;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+/* Chrome, Edge, Safari scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+
+

@@ -1,0 +1,386 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url('https://via.placeholder.com/1920x1080/333333/333333');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 90%;
+    max-width: 1400px;
+    height: 85vh;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #1e88aa;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo img {
+    height: 40px;
+}
+
+.nav-menu {
+    flex: 1;
+    padding: 10px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: white;
+    position: relative;
+}
+
+.nav-item.active {
+    background-color: #16738e;
+    border-left: 4px solid #ff4e4e;
+}
+
+.nav-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+.badge {
+    background-color: #ff4e4e;
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.help-section {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+}
+
+.help-section h4 {
+    margin-bottom: 10px;
+}
+
+.help-section p {
+    margin: 5px 0;
+    font-size: 11px;
+}
+
+.help-section a {
+    color: #ff4e4e;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.header {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-menu {
+    display: flex;
+}
+
+.tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.tab.active {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+}
+
+.train-btn {
+    background-color: #ff4e4e;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* Stats Cards */
+.stats-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background-color: #17a2b8;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-info h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stat-icon {
+    font-size: 28px;
+    opacity: 0.8;
+}
+
+/* Orders Section */
+.orders-section {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.orders-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-title {
+    display: flex;
+    align-items: center;
+}
+
+.orders-title h3 {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.orders-count {
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.filter-tabs {
+    display: flex;
+}
+
+.filter-tab {
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.filter-tab.active {
+    background-color: #17a2b8;
+    color: white;
+}
+
+/* Table Styles */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    background-color: #f9f9f9;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-table td {
+    padding: 12px 15px;
+    font-size: 13px;
+    border-bottom: 1px solid #eee;
+}
+
+.food-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.status-btn {
+    background-color: #ff4e4e;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.action-btn {
+    color: #999;
+    cursor: pointer;
+}
+
+/* User Menu Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    z-index: 1;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropdown-btn {
+    background-color: #f5f5f5;
+}
+
+/* User dropdown items */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item i {
+    margin-right: 10px;
+    width: 16px;
+}
+
+/* For zebra striping in the table */
+.orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.container {
+    padding: 20px;
+    background-color: #8a8888;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin: 20px;
+    overflow-x: auto;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #333;
+}
+
+.container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.container thead {
+    background-color: #f9f9f9;
+}
+
+.container th,
+.container td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.container tr:hover {
+    background-color: #f1f1f1;
+}

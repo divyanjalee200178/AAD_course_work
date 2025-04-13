@@ -9,23 +9,25 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.jsp">Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="login.html">LogIn</a></li>
-                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                <!--                <li class="nav-item"><a class="nav-link" href="user-save.jsp">Customer</a></li>-->
-                <!--                <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>-->
-                <!--                <li class="nav-item"><a class="nav-link" href="logout.jsp">Logout</a></li>-->
-            </ul>
-        </div>
+<div class="sidebar">
+    <h4 class="text-center">Admin Panel</h4>
+    <a href="index.html"><i class="fas fa-language"></i> Home</a>
+    <a href="../static/dash.html"><i class="fas fa-language"></i> Dashboard</a>
+    <a href="user.html"><i class="fas fa-user"></i> User</a>
+    <a href="exam.html"><i class="fas fa-film"></i> Exam</a>
+    <a href="viewExam.html"><i class="fas fa-users"></i> View exam</a>
+    <a href="result.html"><i class="fas fa-list"></i> Result</a>
+    <a href="question.html"><i class="fas fa-tags"></i> Question</a>
+    <a href="paper2.html"><i class="fas fa-language"></i> Paper</a>
+</div>
+
+<div class="main-content">
+    <div class="topbar">
+        <div>USER CRUD GENERATOR - User Form</div>
+        <div><i class="fas fa-user-circle"></i> (Admin)</div>
     </div>
-</nav>
+
+
 
 <form class="row g-3" id="examForm">
     <h2>Exam Manage</h2>
@@ -71,6 +73,7 @@
         </table>
     </div>
 </form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -86,14 +89,14 @@
     });
 
     function getToken() {
-        return localStorage.getItem("jwtToken"); // Retrieve JWT from local storage
+        return localStorage.getItem("jwtToken");
     }
 
     function setupRowClickListener() {
         $(document).on("click", "#examTableBody tr", function () {
-            let selectedRow = $(this).children("td"); // Get all table cells from the clicked row
+            let selectedRow = $(this).children("td");
 
-            // Assign values from the clicked row to input fields
+
             $('#exam_id').val(selectedRow.eq(0).text());
             $('#duration').val(selectedRow.eq(1).text());
             $('#description').val(selectedRow.eq(2).text());

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.function.Function;
 
 @Component
 @PropertySource(ignoreResourceNotFound = true, value = "classpath:otherprops.properties")
-public class JwtUtil {
+public class JwtUtil implements Serializable {
     private static final long serialVersionUID = 234234523523L;
 
     public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 12;

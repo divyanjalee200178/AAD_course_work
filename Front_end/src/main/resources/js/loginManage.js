@@ -37,6 +37,8 @@ $(document).ready(function () {
                     const decoded = jwt_decode(token);
                     let role = decoded.role || "";
 
+                    console.log(token)
+
 //add role==ADMIN,STUDENT,TEACHER
 
                     console.log("Decoded token:", decoded);
@@ -47,7 +49,7 @@ $(document).ready(function () {
                     } else if (role === "ROLE_STUDENT" || role === "Student" || role=="STUDENT") {
                         window.location.href = "../static/studentDash.html";
                     } else if (role === "ROLE_TEACHER" || role === "Teacher" || role=="REACHER") {
-                        window.location.href = "../static/studentDash.html";
+                        window.location.href = "../static/teacherDash.html";
                     } else {
                         alert("Invalid role: " + role);
                     }
@@ -62,9 +64,8 @@ $(document).ready(function () {
         });
     });
 
-    // Function to save the token in localStorage
+
     function onLoginSuccess(response) {
-        // Store the JWT token in localStorage
         localStorage.setItem("jwtToken", response.token);
         const token = localStorage.getItem("jwtToken");
         console.log("Token after saving:", token);

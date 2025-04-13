@@ -252,3 +252,54 @@ body {
     background: linear-gradient(135deg, #ffc107, #e0a800);
     color: black;
 }
+
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.12); /* light transparency */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    position: relative;
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.table th {
+    background-color: rgba(0, 123, 255, 0.9);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.table td {
+    color: black;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.01);
+    transition: 0.2s;
+}
+
+.table tbody tr:nth-child(even) td {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.table-wrapper {
+    margin-left: -200px;
+}
+.form-control::placeholder {
+    color: white;
+    opacity: 1;
+}
+
+

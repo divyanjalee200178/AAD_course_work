@@ -6,87 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard - SB Student</title>
+        <title>Dashboard - SB Teacher</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="../css/adminDashboard.css">
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
-    <style>
-        #examCardsContainer {
-            margin-top: 150px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #2c2e2f, #ffffff);
-            min-height: 100vh;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-
-
-        .card {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            padding: 24px;
-            width: 350px;
-            color: #030303;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            background-color: #e2e6ea;
-            color: black;
-        }
-
-        .card-body {
-            padding: 15px;
-            text-align: left;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #e34906; /* Blue color for title */
-        }
-
-        .card-text {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-
-        .card-text strong {
-            color: #090909;
-        }
-
-        @media (max-width: 767px) {
-            .card {
-                max-width: 100%;
-            }
-        }
-
-
-    </style>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
@@ -124,12 +48,10 @@
                                 Dashboard
                             </a>
 
-                            <a class="nav-link" href="../templates/login.html">
+                            <a class="nav-link" href="../templates/user.html">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Login
+                                User Manage
                             </a>
-
-
                             <div class="sb-sidenav-menu-heading">Interface</div>
 <!--                            **********************************************************************************-->
 <!--                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">-->
@@ -153,11 +75,10 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-<!--                                    <a class="nav-link" href="../templates/user.html">User Manage</a>-->
-                                    <a class="nav-link" href="../templates/paper2.html">Paper</a>
-                                    <a class="nav-link" href="../templates/paper.html">All ready paper</a>
-                                    <a class="nav-link" href="../templates/viewResul.html">Result</a>
-                                    <a class="nav-link" href="../templates/viewExam.html">Exam</a>
+                                    <a class="nav-link" href="../templates/subject.html">Subject Manage</a>
+                                    <a class="nav-link" href="../templates/exam.html">Exam Manage</a>
+                                    <a class="nav-link" href="../templates/result.html">Result Manage</a>
+                                    <a class="nav-link" href="../templates/question.html">Question Manage</a>
                                     <a class="nav-link" href="layout-static.html">Static Navigation</a>
                                     <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                                 </nav>
@@ -218,11 +139,105 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                <!-- Exam Cards Section -->
-                <div class="row mt-4" id="examCardsContainer">
-                    <!-- Cards will be appended here by JavaScript -->
-                </div>
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">Dashboard</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Success Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        Income Area Chart
+                                    </div>
+                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        Bar Chart Example
+                                    </div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                DataTable Example
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Position</th>
+                                            <th>Office</th>
+                                            <th>Age</th>
+                                            <th>Start date</th>
+                                            <th>Salary</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -244,68 +259,5 @@
         <script src="../demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="../js/option/datatables-simple-demo.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-
-        $(document).ready(function () {
-            viewExams();
-            loadChart();
-        });
-        function viewExams() {
-            $.ajax({
-                url: "http://localhost:8080/api/v1/exam/get", // Replace with your actual API endpoint
-                method: "GET",
-                success: function(response) {
-                    console.log("API response:", response);
-                    let cardsContainer = $("#examCardsContainer");
-                    cardsContainer.empty();
-                    if (response && Array.isArray(response)) {
-                        response.forEach(exam => {
-                            console.log("Exam data:", exam);
-                            // Create and append a card for each exam
-                            cardsContainer.append(`
-                                <div class="col-md-4 mb-4">
-                                    <div class="card shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Exam ID: ${exam.id}</h5>
-                                            <p class="card-text"><strong>Duration:</strong> ${exam.duration}</p>
-                                            <p class="card-text"><strong>Description:</strong> ${exam.description}</p>
-                                            <p class="card-text"><strong>Start Date:</strong> ${exam.startDate}</p>
-                                            <p class="card-text"><strong>End Date:</strong> ${exam.endDate}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            `);
-                        });
-                    } else {
-                        alert("No exams found.");
-                    }
-                },
-                error: function() {
-                    alert("Error fetching exams!");
-                }
-            });
-        }
-
-        // Function to load the Chart.js chart
-        function loadChart() {
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',  // or 'line', 'pie', etc.
-                data: {
-                    labels: ['January', 'February', 'March'],
-                    datasets: [{
-                        label: 'My Dataset',
-                        data: [12, 19, 3]
-                    }]
-                }
-            });
-        }
-
-    </script>
     </body>
 </html>
