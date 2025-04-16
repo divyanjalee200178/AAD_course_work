@@ -4,7 +4,7 @@ YouTube Video part2- https://youtu.be/vdmsLNfKFko
 
 ![Screenshot (117)](https://github.com/user-attachments/assets/b3b90ffb-0f1a-4d04-8ae0-b35af30beaa7)
 ![Screenshot (114)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/adminDashboard.png)
-![Screenshot (email.png)](https://https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
+![Screenshot (email)](https://https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
 
 ![Screenshot (116)](https://https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
 
