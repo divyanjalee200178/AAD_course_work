@@ -133,7 +133,9 @@ public class WebSecurityConfig {
                                 "/api/v1/user/**",
                                 "/api/v1/results/**",
                                 "/api/v1/question/**",
-
+                                //add
+                                "/api/v1/pdf/download/**",
+                                "/api/v1/pdf/view/**",
 
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

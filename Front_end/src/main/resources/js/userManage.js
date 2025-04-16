@@ -34,7 +34,7 @@ function saveData() {
         contentType: "application/json",
         data: JSON.stringify(user),
         success: function () {
-            alert("Customer saved successfully!");
+            alert("User saved successfully!");
             $("#userForm")[0].reset();
             loadNextId();
             loadAllUsers();
@@ -153,7 +153,7 @@ function loadAllUsers() {
             });
         },
         error: function () {
-            alert("Error loading customers.");
+            alert("Error loading Users.");
         }
     });
 }

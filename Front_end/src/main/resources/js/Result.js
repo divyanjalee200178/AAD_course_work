@@ -53,7 +53,7 @@ function loadStudentIds() {
             studentSelect.append('<option value="">Select Student</option>');
 
             users.forEach(user => {
-                if (user.role === 'student' || user.role === 'Student') {
+                if (user.role === 'student' || user.role === 'Student' || user.role === 'STUDENT') {
                     studentSelect.append(`<option value="${user.u_id}">${user.u_id}</option>`);
                 }
             });

@@ -74,10 +74,9 @@
 
 <script>
 
-    let questionsData = []; // Store questions
-    let answersData = {}; // Store selected answers
+    let questionsData = [];
+    let answersData = {};
 
-    // Fetch JWT token
     function getJWTToken() {
         return localStorage.getItem("jwtToken");
     }
@@ -149,19 +148,19 @@
     }
 
 
-    // Store selected answer
+
     function saveAnswer(qid, answer, checkbox) {
         if (checkbox.checked) {
-            // Add the selected answer
+
             answersData[qid].push(answer);
         } else {
-            // Remove the answer if unchecked
+
             answersData[qid] = answersData[qid].filter(ans => ans !== answer);
         }
         console.log("Saved Answers:", answersData);
     }
 
-    // Submit answers to the server
+
     async function submitAnswers() {
         try {
             const examId = document.getElementById('examId').value;
@@ -196,13 +195,13 @@
     }
 
 
-    // Load exam IDs
+
     async function loadExams() {
         try {
             const token = getJWTToken();
             const response = await fetch('http://localhost:8080/api/v1/exam/getAllExamIds', {
                 headers: {
-                    'Authorization': 'Bearer ' + token  // Add JWT token to the headers
+                    'Authorization': 'Bearer ' + token
                 }
             });
             if (!response.ok) throw new Error('Failed to load exams');
@@ -226,7 +225,7 @@
             const token = getJWTToken();
             const response = await fetch('http://localhost:8080/api/v1/user/get', {
                 headers: {
-                    'Authorization': 'Bearer ' + token  // Add JWT token to the headers
+                    'Authorization': 'Bearer ' + token
                 }
             });
             if (!response.ok) throw new Error('Failed to load users');
@@ -244,7 +243,7 @@
         }
     }
 
-    // Save result to the server
+
     async function saveResult() {
         const userId = document.getElementById("userId").value;
         const examId = document.getElementById("examId").value;
@@ -254,12 +253,12 @@
             return;
         }
 
-        // Ensure results are available
+
         const scoreText = document.getElementById("result").querySelector("p:nth-child(1)")?.textContent || "";
         const percentageText = document.getElementById("result").querySelector("p:nth-child(2)")?.textContent || "";
         const gradeText = document.getElementById("result").querySelector("p:nth-child(3)")?.textContent || "";
 
-        // Extract values
+
         const score = scoreText.split(": ")[1] || "0";
         const percentage = percentageText.split(": ")[1]?.replace("%", "") || "0"; // Remove '%' sign
         const grade = gradeText.split(": ")[1] || "N/A";
@@ -277,7 +276,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token  // Add JWT token to the headers
+                    'Authorization': 'Bearer ' + token
                 },
                 body: JSON.stringify(resultData)
             });
@@ -290,13 +289,13 @@
         }
     }
 
-    // Initialize when page loads
+
     window.addEventListener('DOMContentLoaded', () => {
         loadExams();
         loadUsers();
     });
 
-    // Load questions for selected exam
+
     document.getElementById('examId').addEventListener('change', (event) => {
         const examId = event.target.value;
         if (examId) {

@@ -19,6 +19,7 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="login.html">LogIn</a></li>
                 <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="../static/dash.html">Dashboard</a></li>
                 <!--                <li class="nav-item"><a class="nav-link" href="user-save.jsp">Customer</a></li>-->
                 <!--                <li class="nav-item"><a class="nav-link" href="login.jsp">Login</a></li>-->
                 <!--                <li class="nav-item"><a class="nav-link" href="logout.jsp">Logout</a></li>-->
@@ -119,13 +120,13 @@
 
 <script>
     $(document).ready(function () {
-        const token = localStorage.getItem("jwtToken"); // Get JWT token
+        const token = localStorage.getItem("jwtToken");
         console.log(localStorage.getItem("jwtToken"));
 
 
         if (!token) {
             alert("You are not logged in!");
-            window.location.href = "login.html"; // Redirect to login page
+            window.location.href = "login.html";
             return;
         }
 
@@ -166,8 +167,8 @@
         });
 
         $('#questionTableBody').on('click', 'tr', function () {
-            // Clear the previous values
-            $("#questionId").val(""); // Auto-generated, not editable
+
+            $("#questionId").val("");
             $("#name").val("");
             $("#content").val("");
             $("#option1").val("");
@@ -179,18 +180,18 @@
             $("#examId").val("");
             $("#userId").val("");
 
-            // Populate the form fields with the selected row data
-            $("#questionId").val($(this).find('td:eq(0)').text()); // Assuming the first column is the Question ID
-            $("#mcqNumber").val($(this).find('td:eq(1)').text()); // Assuming the second column is MCQ Number
-            $("#name").val($(this).find('td:eq(2)').text()); // Assuming the third column is Name
-            $("#content").val($(this).find('td:eq(3)').text()); // Assuming the fourth column is Content
-            $("#option1").val($(this).find('td:eq(4)').text()); // Assuming the fifth column is Option 1
-            $("#option2").val($(this).find('td:eq(5)').text()); // Assuming the sixth column is Option 2
-            $("#option3").val($(this).find('td:eq(6)').text()); // Assuming the seventh column is Option 3
-            $("#option4").val($(this).find('td:eq(7)').text()); // Assuming the eighth column is Option 4
-            $("#answer").val($(this).find('td:eq(8)').text()); // Assuming the ninth column is Answer
-            $("#examId").val($(this).find('td:eq(9)').text()); // Assuming the tenth column is Exam ID
-            $("#userId").val($(this).find('td:eq(10)').text()); // Assuming the eleventh column is User ID
+
+            $("#questionId").val($(this).find('td:eq(0)').text());
+            $("#mcqNumber").val($(this).find('td:eq(1)').text());
+            $("#name").val($(this).find('td:eq(2)').text());
+            $("#content").val($(this).find('td:eq(3)').text());
+            $("#option1").val($(this).find('td:eq(4)').text());
+            $("#option2").val($(this).find('td:eq(5)').text());
+            $("#option3").val($(this).find('td:eq(6)').text());
+            $("#option4").val($(this).find('td:eq(7)').text());
+            $("#answer").val($(this).find('td:eq(8)').text());
+            $("#examId").val($(this).find('td:eq(9)').text());
+            $("#userId").val($(this).find('td:eq(10)').text());
         });
 
     });
@@ -291,6 +292,7 @@
             data: JSON.stringify(updatedQuestion),
             success: function (response) {
                 alert("Question updated successfully!");
+                loadAllSubjects();
                 clearForm();
             },
             error: function (xhr) {

@@ -10,6 +10,8 @@ import org.example.back_end.service.impl.UserServiceImpl;
 import org.example.back_end.util.JwtUtil;
 import org.example.back_end.util.ResponseUtil;
 import org.example.back_end.util.VarList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +30,14 @@ public class UserController {
     @Autowired
     private UserService userServices;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final JwtUtil jwtUtil;
+
     @PostMapping("save")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseUtil saveUser(@RequestBody UserDTO userDTO) {
+    public ResponseUtil saveUser(@Valid @RequestBody UserDTO userDTO) {
+        logger.info("Request to save user: {}", userDTO);
         try {
             boolean res = userService.addUser(userDTO);
             if (res) {
@@ -40,6 +46,7 @@ public class UserController {
                 return new ResponseUtil(200, "User already exists", null);
             }
         } catch (Exception e) {
+            logger.error("Error saving user: {}", e.getMessage(), e);
             return new ResponseUtil(500, "Error saving user: " + e.getMessage(), null);
         }
     }
@@ -77,7 +84,7 @@ public class UserController {
 
 
     @PutMapping("update")
-    public ResponseUtil updateUser(@RequestBody UserDTO userDTO){
+    public ResponseUtil updateUser(@Valid @RequestBody UserDTO userDTO){
         System.out.println(userDTO);  // Log the incoming request body
         boolean isUpdated = userService.updateUsers(userDTO);
         if (isUpdated) {
@@ -97,7 +104,7 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
         boolean saved = userService.saveUser(userDTO);
         if (saved) {
             return ResponseEntity.status(HttpStatus.CREATED)

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../css/all/pdfFile.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <!-- Left side: Logo -->
+        <div class="logo">
+            <div class="logo-icon"></div>
+            Pdf uploader
+        </div>
+
+        <!-- Right side: Navigation links -->
+        <div class="nav">
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+            <a href="viewExam.html">Exam</a>
+            <a href="viewResul.html">Result</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="form-card">
+        <h2>Download or view papers</h2>
+
+        <div id="pdfCards" class="pdf-cards-container">
+            <!-- PDF cards will be added dynamically here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        fetchPDFs();
+    });
+
+    function getJWTToken() {
+        return localStorage.getItem("jwtToken");
+    }
+
+    function fetchPDFs() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/pdf/all",
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + getJWTToken()
+            },
+
+            success: function (pdfList) {
+                const pdfCardsContainer = $("#pdfCards");
+                pdfCardsContainer.empty();
+
+                pdfList.forEach(pdf => {
+                    const card = `
+                    <div class="pdf-card">
+                        <div class="pdf-card-header">
+                            <h3>${pdf.fileName}</h3>
+                        </div>
+                        <div class="pdf-card-body">
+                            <p><strong>ID:</strong> ${pdf.id}</p>
+                            <p><strong>Actions:</strong></p>
+                            <a href="http://localhost:8080/api/v1/pdf/view/${pdf.id}" target="_blank">View</a> |
+                            <a href="http://localhost:8080/api/v1/pdf/download/${pdf.id}" target="_blank">Download</a>
+                        </div>
+                    </div>
+                    `;
+                    pdfCardsContainer.append(card);
+                });
+            },
+            error: function (err) {
+                console.error("Failed to fetch PDFs", err);
+            }
+        });
+    }
+</script>
+
+
+
+</body>
+</html>
