@@ -6,7 +6,11 @@ YouTube Video part2- https://youtu.be/vdmsLNfKFko
 ![Screenshot (114)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/adminDashboard.png)
 ![(email.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/exam.png)
 
-![(email.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)(https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/Screenshot%20(114).png))
+![(email.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
+![(login page.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
 
 ![(login page.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
-login page.png
+![(login page.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
+![(login page.png)](https://github.com/divyanjalee200178/AAD_course_work/blob/37950e8b3799c58c00e9abda1a627ae2d162a151/email.png)
+
+
