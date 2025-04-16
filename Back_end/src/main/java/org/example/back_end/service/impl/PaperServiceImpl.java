@@ -30,11 +30,10 @@ public class PaperServiceImpl implements PaperService {
         return questions.stream().map(question -> {
             QuestionDTO dto = modelMapper.map(question, QuestionDTO.class);
 
-            // Set userId in the DTO. Handle case where user might be null
-            dto.setUserId(question.getUser() != null ? question.getUser().getU_id() : 0);  // Assuming userId is set as 0 when user is null
 
-            // Optionally, set other fields if needed. For example, if examId is missing, you can set it here:
-            dto.setExamId(question.getExam() != null ? question.getExam().getId() : 0);  // Assuming examId is set as 0 when exam is null
+            dto.setUserId(question.getUser() != null ? question.getUser().getU_id() : 0);
+
+            dto.setExamId(question.getExam() != null ? question.getExam().getId() : 0);
 
             return dto;
         }).collect(Collectors.toList());
@@ -61,7 +60,6 @@ public class PaperServiceImpl implements PaperService {
             questionMap.put("answer", question.getAnswer());
             questionMap.put("mcqNumber", question.getMcqNumber());
 
-            // Manually add userId and examId
             questionMap.put("userId", question.getUser() != null ? question.getUser().getU_id() : 0);
             questionMap.put("examId", question.getExam() != null ? question.getExam().getId() : 0);
 
@@ -75,7 +73,7 @@ public class PaperServiceImpl implements PaperService {
 
     @Override
     public int getTotalQuestions() {
-        return (int) questionRepository.count(); // or any other logic to get the total number of questions
+        return (int) questionRepository.count();
     }
 
     @Override
@@ -86,12 +84,10 @@ public class PaperServiceImpl implements PaperService {
             int qid = entry.getKey();
             List<Integer> selectedAnswers = entry.getValue();
 
-            // Retrieve correct answers from the database
             List<Integer> correctAnswers = questionRepository.findCorrectAnswersByQid(qid);
 
-            // Check if selected answers match the correct ones
             if (selectedAnswers.containsAll(correctAnswers) && correctAnswers.containsAll(selectedAnswers)) {
-                score++; // Increment score for correct answers
+                score++;
             }
         }
 
@@ -107,12 +103,10 @@ public class PaperServiceImpl implements PaperService {
             int qid = entry.getKey();
             List<Integer> selectedAnswers = entry.getValue();
 
-            // Retrieve correct answers from the database
             List<Integer> correctAnswers = questionRepository.findCorrectAnswersByQid(qid);
 
-            // Check if selected answers match the correct ones
             if (selectedAnswers.containsAll(correctAnswers) && correctAnswers.containsAll(selectedAnswers)) {
-                score++; // Increment score for correct answers
+                score++;
             }
         }
 

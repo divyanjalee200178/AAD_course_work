@@ -45,21 +45,21 @@ public class McqPaperController {
 
     @PostMapping("/submit")
     public ResponseEntity<Map<String, Object>> submitAnswers(@RequestBody Map<Integer, List<Integer>> userAnswers) {
-        int score = paperService.calculateScore(userAnswers);  // Calculate score based on answers
-        int totalQuestions = paperService.getTotalQuestions(); // Total number of questions
-        double percentage = (score * 100.0) / totalQuestions;   // Calculate percentage (based on score and total questions)
+        int score = paperService.calculateScore(userAnswers);
+        int totalQuestions = paperService.getTotalQuestions();
+        double percentage = (score * 100.0) / totalQuestions;
 
-        // Calculate grade based on percentage
+
         String grade = calculateGrade(percentage);
 
-        // Prepare the response object
+
         Map<String, Object> result = new HashMap<>();
         result.put("score", score);
         result.put("totalQuestions", totalQuestions);
-        result.put("percentage", percentage);  // Send the percentage along with score and totalQuestions
-        result.put("grade", grade);  // Add grade to the result
+        result.put("percentage", percentage);
+        result.put("grade", grade);
 
-        return ResponseEntity.ok(result); // Return the result as a JSON response
+        return ResponseEntity.ok(result);
     }
 
     private String calculateGrade(double percentage) {
@@ -70,9 +70,9 @@ public class McqPaperController {
         } else if (percentage >= 55) {
             return "C";
         } else if (percentage >= 40) {
-            return "S"; // S for Pass
+            return "S";
         } else {
-            return "F"; // Failed
+            return "F";
         }
     }
 
@@ -80,23 +80,21 @@ public class McqPaperController {
     @PostMapping("/submit1")
     public ResponseEntity<Map<String, Object>> submitAnswer(@RequestBody Map<Integer, List<Integer>> userAnswers,
                                                             @RequestParam int examId) {
-        // Get the total number of questions for the selected exam
+
         int totalQuestions = paperService.getTotalQuestionsForExam(examId);
 
-        int score = paperService.calculateScores(userAnswers, examId);  // Pass examId to calculateScores
-        double percentage = (score * 100.0) / totalQuestions;   // Calculate percentage (based on score and total questions)
+        int score = paperService.calculateScores(userAnswers, examId);
+        double percentage = (score * 100.0) / totalQuestions;
 
-        // Calculate grade based on percentage
         String grade = calculateGrade(percentage);
 
-        // Prepare the response object
         Map<String, Object> result = new HashMap<>();
         result.put("score", score);
         result.put("totalQuestions", totalQuestions);
-        result.put("percentage", percentage);  // Send the percentage along with score and totalQuestions
-        result.put("grade", grade);  // Add grade to the result
+        result.put("percentage", percentage);
+        result.put("grade", grade);
 
-        return ResponseEntity.ok(result); // Return the result as a JSON response
+        return ResponseEntity.ok(result);
     }
 
 
