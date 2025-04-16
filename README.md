@@ -3,6 +3,4 @@ YouTube Video part1- https://youtu.be/4D9mIbODsw0
 YouTube Video part2- https://youtu.be/vdmsLNfKFko
 
 ![Screenshot (117)](https://github.com/user-attachments/assets/b3b90ffb-0f1a-4d04-8ae0-b35af30beaa7)
-![Screenshot (114)](https://github.com/user-attachments/assets/b3b90ffb-0f1a-4d04-8ae0-b35af30beaa7)
-
-![Screenshot (117)](
+![Screenshot (114)](https://github.com/)
