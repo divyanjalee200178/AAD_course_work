@@ -33,7 +33,7 @@ public class PdfFileServiceImpl implements PdfFileService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new Exception("User not found"));
 
-        // Set a safe, absolute directory for storing PDF files
+
         String uploadDir = System.getProperty("user.home") + File.separator + "greenwood-uploads" + File.separator + "pdf";
 
         File dir = new File(uploadDir);

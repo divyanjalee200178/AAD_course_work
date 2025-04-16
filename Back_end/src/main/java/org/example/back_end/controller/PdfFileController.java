@@ -54,12 +54,12 @@ public class PdfFileController {
             Map<String, Object> pdfMap = new HashMap<>();
             pdfMap.put("id", pdf.getId());
             pdfMap.put("fileName", pdf.getFileName());
-            pdfMap.put("filePath", pdf.getFilePath()); // You can omit this if you don't need it
+            pdfMap.put("filePath", pdf.getFilePath());
             if (pdf.getUser() != null) {
                 pdfMap.put("userId", pdf.getUser().getU_id());
-                pdfMap.put("userName", pdf.getUser().getName()); // Optional if you want to show the name too
+                pdfMap.put("userName", pdf.getUser().getName());
             } else {
-                pdfMap.put("userId", null); // or 0 or "N/A"
+                pdfMap.put("userId", null);
             }
             return pdfMap;
         }).collect(Collectors.toList());
@@ -109,7 +109,7 @@ public class PdfFileController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PDF not found");
             }
 
-            // Call service method to handle the update
+
             boolean updated = pdfFileService.updatePdf(id, file);
             if (updated) {
                 return ResponseEntity.ok("PDF updated successfully!");

@@ -19,7 +19,7 @@ async function loadUsers() {
 
         const users = await response.json();
         const userSelect = document.getElementById('userDropdown');
-        userSelect.innerHTML = '<option value="">--Select Admin--</option>'; // Reset options
+        userSelect.innerHTML = '<option value="">--Select Admin--</option>';
 
         users.forEach(user => {
             if (user.role && user.role.toUpperCase() === "ADMIN") {
